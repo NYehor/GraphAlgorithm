@@ -1,0 +1,140 @@
+﻿@{
+    ViewBag.Title = "Matrix";
+}
+
+@Scripts.Render("~/bundles/Scripts")
+
+<script>
+
+    var g_MatrixSize = 3;
+
+    function PackMatrix() {
+
+        var matrix = "";
+
+        for (var i = 0; i < g_MatrixSize; i++) {
+            for (var j = 0; j < g_MatrixSize; j++) {
+
+                var element = document.getElementsByName("field" + i + j)[0];
+                matrix = matrix + (element.value.length > 0 ? element.value : "0") + ", ";
+            }
+            matrix = matrix + "\n";
+        }
+
+        return matrix;
+    }
+
+    function CopyMatrixToTextInput() {
+
+        document.getElementById("AdjacencyMatrixFieldPage").value = PackMatrix();
+    }
+
+    function CreateInputElement(col, row) {
+        var input = document.createElement("input");
+        input.type = "text";
+        input.size = 3;
+        input.name = "field" + col + row;
+        input.value = 0;
+        input.onkeyup = function () { CopyMatrixToTextInput(); };
+
+        return input;
+    }
+
+    function InsertBeforeElement(element, beforeName, space) {
+
+        var parent = document.getElementsByName(beforeName)[0].parentNode;
+        var beforeElement = document.getElementsByName(beforeName)[0];
+        parent.insertBefore(element, beforeElement);
+
+        if (space) {
+            parent.insertBefore(document.createTextNode('\u00A0'), beforeElement);
+        }
+    }
+
+    function IncSize() {
+
+        for (var i = 0; i < g_MatrixSize; i++) {
+
+            var input = CreateInputElement(g_MatrixSize, i);
+            InsertBeforeElement(input, "matrixEnd", true);
+        }
+        var br = document.createElement("br");
+        br.setAttribute("name", "row" + g_MatrixSize);
+        InsertBeforeElement(br, "matrixEnd", false);
+
+        for (var i = 0; i < g_MatrixSize + 1; i++) {
+
+            var input = CreateInputElement(i, g_MatrixSize);
+            InsertBeforeElement(input, "row" + i, g_MatrixSize);
+        }
+
+        g_MatrixSize++;
+        CopyMatrixToTextInput();
+    }
+
+</script>
+
+<p>
+
+</p>
+<ul class="nav nav-pills" id="pills-tab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
+           aria-controls="pills-home" aria-selected="true">Ввести в таблицу</a>
+    </li>
+    <li>
+        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"
+           aria-controls="pills-profile" aria-selected="false">Ввести как текст</a>
+    </li>
+</ul>
+
+<div class="tab-content pt-2 pl-1" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <div id="MatrixForm">
+
+            <form id="AdjacencyMatrixFieldInput" role="form">
+                <input type="text" name="field00" size="3" value="0" onkeyup="CopyMatrixToTextInput()">
+                <input type="text" name="field01" size="3" value="0" onkeyup="CopyMatrixToTextInput()">
+                <input type="text" name="field02" size="3" value="0" onkeyup="CopyMatrixToTextInput()">
+                <br name="row0" />
+
+                <input type="text" name="field10" size="3" value="0" onkeyup="CopyMatrixToTextInput()">
+                <input type="text" name="field11" size="3" value="0" onkeyup="CopyMatrixToTextInput()">
+                <input type="text" name="field12" size="3" value="0" onkeyup="CopyMatrixToTextInput()">
+                <br name="row1" />
+
+                <input type="text" name="field20" size="3" value="0" onkeyup="CopyMatrixToTextInput()">
+                <input type="text" name="field21" size="3" value="0" onkeyup="CopyMatrixToTextInput()">
+                <input type="text" name="field22" size="3" value="0" onkeyup="CopyMatrixToTextInput()">
+                <br name="row2" />
+
+                <span name="matrixEnd"></span>
+            </form>
+            <p>
+
+            </p>
+            <button class="btn-dark" onclick="IncSize()" value="add" name="add">
+                <span class="glyphicon glyphicon-plus"></span>
+                Добавить вершину в матрицу
+            </button>
+            <p>
+
+            </p>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        <form>
+            <textarea id="AdjacencyMatrixFieldPage" rows="10" cols="30">
+0, 0, 0
+0, 0, 0
+0, 0, 0</textarea>
+            <div id="idSeparatorList">
+                Разделитель: <input type="radio" name="separator" value="commo" id="commoSep" checked><label for="commoSep">запятая</label>
+                <input type="radio" name="separator" value="space" id="spaceSep"> <label for="spaceSep">пробел</label>
+            </div>
+        </form>
+        <p>
+
+        </p>
+    </div>
+</div>
