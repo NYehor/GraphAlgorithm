@@ -11,6 +11,9 @@ namespace GraphAlgorithm
             bundles.Add(new ScriptBundle("~/bundles/Scripts").Include(
                         "~/Scripts/CustomScripts/MatrixParser.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/cytoscape").Include(
+                        "~/Scripts/cytoscape.min.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-3.4.1.min.js"));
 

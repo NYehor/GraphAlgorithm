@@ -2,30 +2,102 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+@Scripts.Render("~/bundles/Scripts")
+<link rel="stylesheet" href="~/Content/Home.css">
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+<p>
+
+</p>
+
+<section>
+    <ul class="nav nav-pills">
+        <li class="dropdown">
+            <button class="btn btn-primary dropdown-toggle margin-right" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Graph
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Create</a>
+                <a class="dropdown-item" href="#">Open </a>
+                <a class="dropdown-item" href="#">Save </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Adjacency Matrix </a>
+                <a class="dropdown-item" href="#">Incidence Matrix </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Delete </a>
+            </div>
+        </li>
+
+        <li type="button" class="btn btn-primary margin-right">Add</li>
+        <li type="button" class="btn btn-primary margin-right">Connect</li>
+
+        <li class="dropdown">
+            <button class="btn btn-primary dropdown-toggle margin-right" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Algorithm
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Create</a>
+                <a class="dropdown-item" href="#">Open </a>
+                <a class="dropdown-item" href="#">Save </a>
+                <a class="dropdown-item" href="#">Delete </a>
+            </div>
+        </li>
+
+        <li type="button" class="btn btn-primary margin-right" id="deleteBtn" onclick="remove()">Delete</li>
+
+    </ul>
+</section>
+<p>
+
+</p>
+
+<section>
+    <div id="message" class="alert alert-success">
+        Text
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+</section>
+
+<div id="cy"></div>
+
+<script src="~/Scripts/CustomScripts/Index.js"></script>
+
+<script>
+    function findDimensions() {
+        var height = window.innerHeight; document.body.clientHeight;
+        var el = document.getElementById("cy");
+
+        el.style.height = height - 250 + "px";
+    }
+
+    if (window.addEventListener)
+        window.addEventListener("load", findDimensions, false);
+    else if (window.attachEvent)
+        window.attachEvent("onload", findDimensions);
+    window.onresize = findDimensions;
+
+    function remove()
+    {
+        var el = document.getElementById("deleteBtn");
+
+        if (el.className === "btn btn-primary margin-right") {
+
+            el.className = "btn btn-secondary margin-right";
+
+            cy.on('tap', function (evt) {
+                var node = evt.target;
+
+                cy.remove(node);
+                console.log('tapped ' + node.id());
+            });
+        }
+        else {
+            el.className = "btn btn-primary margin-right";
+            cy.removeListener('tap');
+        }
+    }
+</script>
+
+<p>
+
+</p>

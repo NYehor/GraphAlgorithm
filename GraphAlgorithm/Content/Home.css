@@ -1,0 +1,13 @@
+﻿body {
+}
+
+#cy {
+    display: block;
+    background-color: #fff;
+    border: 2px solid black;
+    bottom: 0;
+}
+
+.margin-right {
+    margin-right: 5px;
+}
