@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace GraphAlgorithm.Services
+namespace SearchTree
 {
-    public interface IMethod
+    interface IMethod
     {
-        List<List<int>> Resolve(List<List<int>> matrix, bool isIncidentMatrix);
+        List<int> StartDeepSearch(int[,] matrix, int startNodeId);
+
+        List<int> StartWideSearch(int[,] matrix, int startNodeId);
     }
 }
