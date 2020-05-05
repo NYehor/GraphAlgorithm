@@ -4,6 +4,6 @@ namespace GraphAlgorithm.Services
 {
     public interface IMethod
     {
-        List<List<int>> Resolve(List<List<int>> matrix, bool isIncidentMatrix);
+        List<List<double>> Resolve(List<List<double>> matrix, bool isIncidentMatrix);
     }
 }
