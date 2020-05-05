@@ -28,8 +28,9 @@
             </div>
         </li>
 
-        <li type="button" class="btn btn-primary margin-right">Add</li>
-        <li type="button" class="btn btn-primary margin-right">Connect</li>
+        <li type="button" class="btn btn-secondary margin-right" id="addBtn">Add</li>
+
+        <li type="button" class="btn btn-primary margin-right" id="connectBtn">Connect</li>
 
         <li class="dropdown">
             <button class="btn btn-primary dropdown-toggle margin-right" type="button" id="dropdownMenuButton"
@@ -37,14 +38,11 @@
                 Algorithm
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Create</a>
-                <a class="dropdown-item" href="#">Open </a>
-                <a class="dropdown-item" href="#">Save </a>
-                <a class="dropdown-item" href="#">Delete </a>
+
             </div>
         </li>
 
-        <li type="button" class="btn btn-primary margin-right" id="deleteBtn" onclick="remove()">Delete</li>
+        <li type="button" class="btn btn-primary margin-right" id="deleteBtn">Delete</li>
 
     </ul>
 </section>
@@ -75,29 +73,35 @@
     else if (window.attachEvent)
         window.attachEvent("onload", findDimensions);
     window.onresize = findDimensions;
-
-    function remove()
-    {
-        var el = document.getElementById("deleteBtn");
-
-        if (el.className === "btn btn-primary margin-right") {
-
-            el.className = "btn btn-secondary margin-right";
-
-            cy.on('tap', function (evt) {
-                var node = evt.target;
-
-                cy.remove(node);
-                console.log('tapped ' + node.id());
-            });
-        }
-        else {
-            el.className = "btn btn-primary margin-right";
-            cy.removeListener('tap');
-        }
-    }
 </script>
 
 <p>
 
 </p>
+
+<div class="modal fade" id="connectDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Создать ребро</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <input id="firstSelected" list="browsers">
+                <b> -> </b>
+                <input id="secondSelected" list="browsers">
+
+                <datalist id="browsers"> 
+                </datalist>
+            </div>
+            <div class="modal-body text-center">
+                Вес: <input id="valueOfEdge">
+            </div>
+            <div class="modal-footer text-md-center">      
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdges()">Создать</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -53,3 +53,92 @@ cy.add([
     { group: 'edges', data: { id: 'e8', source: 'n5', target: 'n4', label: 6 } },
 ]);
 
+function addEdges() {
+
+    var amountOfEdge = cy.edges().length;
+    cy.add({
+        group: 'edges', data: {
+            id: 'e' + amountOfEdge,
+            source: document.getElementById('firstSelected').value,
+            target: document.getElementById('secondSelected').value,
+            label: document.getElementById('valueOfEdge').value,
+        }
+    });
+}
+
+window.onload = function () {
+
+    var element = document.getElementById("addBtn");;
+    var className = "btn btn-primary margin-right";
+    var amountOfNode = cy.nodes().length;
+
+    function supplayFunc(idElement) {
+        element.className = className;
+
+        element = document.getElementById(idElement);
+        element.className = "btn btn-secondary margin-right";
+        cy.removeListener('tap');
+    }
+
+    cy.on('tap', function (evt) {
+        amountOfNode++;
+        cy.add({
+            group: 'nodes', data: { id: 'n' + amountOfNode },
+            renderedPosition: { x: evt.renderedPosition.x, y: evt.renderedPosition.y }
+        });
+    });
+
+    $("#deleteBtn").on('click', function (eventObject) {
+
+        supplayFunc("deleteBtn");
+
+        cy.on('tap', function (evt) {
+
+            var node = evt.target;
+
+            if (node != evt.cy)
+                cy.remove(node);
+        });
+
+    });
+
+    $("#addBtn").on('click', function (eventObject) {
+
+        supplayFunc("addBtn");
+
+        cy.on('tap', function (evt) {
+            amountOfNode++;
+            cy.add({
+                group: 'nodes', data: { id: 'n' + amountOfNode },
+                renderedPosition: { x: evt.renderedPosition.x, y: evt.renderedPosition.y }
+            });
+        });
+    });
+
+    $("#connectBtn").on('click', function (eventObject) {
+
+        supplayFunc("connectBtn");
+
+        cy.on('tap', 'node', function (evt) {
+            $('#connectDialog').modal();
+
+            var selectedId = evt.target.data('id');
+            document.getElementById('firstSelected').value = selectedId;
+            document.getElementById('secondSelected').value = '';
+            document.getElementById('valueOfEdge').value = '';
+            var element = document.getElementById('browsers');
+
+            while (element.hasChildNodes()) {
+                element.removeChild(element.firstChild);
+            }
+
+            for (var i = 0, length = cy.nodes().length; i < length; i++) {
+
+                var nodeId = cy.nodes()[i].data('id');
+                var child = document.createElement('option');
+                child.value = nodeId;
+                element.appendChild(child);
+            }
+        });
+    });
+}
