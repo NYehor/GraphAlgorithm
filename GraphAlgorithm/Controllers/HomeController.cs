@@ -26,7 +26,7 @@ namespace GraphAlgorithm.Controllers
 
         public ActionResult KruskalAlgorithm()
         {
-            var INF = int.MaxValue;
+            var INF = double.PositiveInfinity;
 
             /* Let us create the following graph 
                 2   3 
@@ -37,25 +37,25 @@ namespace GraphAlgorithm.Controllers
             (3)-------(4) 
                   9         */
 
-            var adjacencyMatrix = new List<List<int>>
+            var adjacencyMatrix = new List<List<double>>
             {
-                new List<int>
+                new List<double>
                 {
                     INF, 2, INF, 6, INF
                 },
-                new List<int>
+                new List<double>
                 {
                     2, INF, 3, 8, 5
                 },
-                new List<int>
+                new List<double>
                 {
                     INF, 3, INF, INF, 7
                 },
-                new List<int>
+                new List<double>
                 {
                     6, 8, INF, INF, 9
                 },
-                new List<int>
+                new List<double>
                 {
                     INF, 5, 7, 9, INF
                 }
@@ -80,29 +80,85 @@ namespace GraphAlgorithm.Controllers
             return View("Index");
         }
 
-        public ActionResult HamiltonianCycleAlgorithm()
+        public ActionResult PrimAlgorithm()
         {
-            var INF = int.MaxValue;
+            var INF = double.PositiveInfinity;
 
-            var adjacencyMatrix = new List<List<int>>
+            /* Let us create the following graph 
+                2   3 
+            (0)--(1)--(2) 
+            |    / \   | 
+           6|  8/   \5 |7 
+            |  /     \ | 
+            (3)-------(4) 
+                  9         */
+
+            var adjacencyMatrix = new List<List<double>>
             {
-                new List<int>
+                new List<double>
                 {
                     INF, 2, INF, 6, INF
                 },
-                new List<int>
+                new List<double>
                 {
                     2, INF, 3, 8, 5
                 },
-                new List<int>
+                new List<double>
                 {
                     INF, 3, INF, INF, 7
                 },
-                new List<int>
+                new List<double>
                 {
                     6, 8, INF, INF, 9
                 },
-                new List<int>
+                new List<double>
+                {
+                    INF, 5, 7, 9, INF
+                }
+            };
+
+            var primAlgorithm = new PrimAlgorithmService();
+
+            var resultMatrix = primAlgorithm.Resolve(adjacencyMatrix, false);
+            Console.WriteLine(primAlgorithm.MinimalCost);
+
+            for (var i = 0; i < resultMatrix[0].Count; i++)
+            {
+                Console.WriteLine();
+
+                for (var j = 0; j < resultMatrix[i].Count; j++)
+                {
+                    Console.Write(resultMatrix[i][j] + "       ");
+                }
+            }
+
+            //some view or Json response
+            return View("Index");
+        }
+
+        public ActionResult HamiltonianCycleAlgorithm()
+        {
+            var INF = double.PositiveInfinity;
+
+            var adjacencyMatrix = new List<List<double>>
+            {
+                new List<double>
+                {
+                    INF, 2, INF, 6, INF
+                },
+                new List<double>
+                {
+                    2, INF, 3, 8, 5
+                },
+                new List<double>
+                {
+                    INF, 3, INF, INF, 7
+                },
+                new List<double>
+                {
+                    6, 8, INF, INF, 9
+                },
+                new List<double>
                 {
                     INF, 5, 7, 9, INF
                 }

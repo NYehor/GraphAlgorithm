@@ -5,20 +5,20 @@ namespace GraphAlgorithm.Services
 {
     public class HamiltonianCycleAlgirithmService : IMethod
     {
-        private const int INF = int.MaxValue;
+        private const double INF = double.PositiveInfinity;
 
         private int _n;
         private List<bool> _isVisitedVertexes;
         private List<int> _path;
-        List<List<int>> _adjacencyMatrix;
+        List<List<double>> _adjacencyMatrix;
 
         public string Path => _path != null && _path.Count > 0
             ? string.Join(" -> ", _path) + " -> " + _path[0]
             : string.Empty;
 
-        public List<List<int>> Resolve(List<List<int>> adjacencyMatrix, bool isIncidentMatrix)
+        public List<List<double>> Resolve(List<List<double>> adjacencyMatrix, bool isIncidentMatrix)
         {
-            var adjacencyMatrixResult = new List<List<int>>();
+            var adjacencyMatrixResult = new List<List<double>>();
             _n = adjacencyMatrix.Count;
             if (_n >= 3)
             {
@@ -66,12 +66,12 @@ namespace GraphAlgorithm.Services
             return false;
         }
 
-        private List<List<int>> ConvertPathToAdjacencyMatrix()
+        private List<List<double>> ConvertPathToAdjacencyMatrix()
         {
-            var adjacencyMatrixResult = new List<List<int>>();
+            var adjacencyMatrixResult = new List<List<double>>();
             for (var i = 0; i < _n; i++)
             {
-                adjacencyMatrixResult.Add(Enumerable.Repeat(int.MaxValue, _n).ToList());            
+                adjacencyMatrixResult.Add(Enumerable.Repeat(double.PositiveInfinity, _n).ToList());            
             }
 
             for (var i = 0; i < _n - 1; i++)
@@ -82,6 +82,6 @@ namespace GraphAlgorithm.Services
             adjacencyMatrixResult[_n - 1][_path[0]] = _adjacencyMatrix[_path[_n - 1]][_path[0]];
 
             return adjacencyMatrixResult;
-        }
+        }      
     }
 }
