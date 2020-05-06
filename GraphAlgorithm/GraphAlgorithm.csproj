@@ -125,6 +125,7 @@
     </Compile>
     <Compile Include="Services\FloydWarshall\FloydWarshallSecondAlgorithm.cs" />
     <Compile Include="Services\FloydWarshall\ListArray2DConverter.cs" />
+    <Compile Include="Services\HamiltonianCycleAlgirithmService.cs" />
     <Compile Include="Services\IMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\PrimAlgorithmService.cs" />
