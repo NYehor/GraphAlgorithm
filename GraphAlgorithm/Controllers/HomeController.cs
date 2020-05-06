@@ -135,5 +135,52 @@ namespace GraphAlgorithm.Controllers
             //some view or Json response
             return View("Index");
         }
+
+        public ActionResult HamiltonianCycleAlgorithm()
+        {
+            var INF = double.PositiveInfinity;
+
+            var adjacencyMatrix = new List<List<double>>
+            {
+                new List<double>
+                {
+                    INF, 2, INF, 6, INF
+                },
+                new List<double>
+                {
+                    2, INF, 3, 8, 5
+                },
+                new List<double>
+                {
+                    INF, 3, INF, INF, 7
+                },
+                new List<double>
+                {
+                    6, 8, INF, INF, 9
+                },
+                new List<double>
+                {
+                    INF, 5, 7, 9, INF
+                }
+            };
+
+            var hamiltonianCycle = new HamiltonianCycleAlgirithmService();
+
+            var resultMatrix = hamiltonianCycle.Resolve(adjacencyMatrix, false);
+
+            System.Diagnostics.Debug.WriteLine(hamiltonianCycle.Path);
+
+            for (var i = 0; i < resultMatrix.Count; i++)
+            {
+                System.Diagnostics.Debug.WriteLine("");
+
+                for (var j = 0; j < resultMatrix[i].Count; j++)
+                {
+                    System.Diagnostics.Debug.Write(resultMatrix[i][j] + "           ");
+                }
+            }
+
+            return View("Index");
+        }
     }
 }
