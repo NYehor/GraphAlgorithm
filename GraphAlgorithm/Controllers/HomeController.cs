@@ -12,7 +12,7 @@ namespace GraphAlgorithm.Controllers
             return View();
         }
 
-        public ActionResult Matrix()
+        public ActionResult AdjacencyMatrix()
         {
             return View();
         }

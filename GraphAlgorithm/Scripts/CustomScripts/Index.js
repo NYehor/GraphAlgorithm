@@ -9,6 +9,7 @@
             selector: 'node',
             style: {
                 'background-color': '#69e',
+                'text-valign': 'center',
                 'label': 'data(id)',
             }
         },
@@ -16,9 +17,9 @@
         {
             selector: 'edge',
             style: {
-                'width': 1,
+                'width': 2,
                 'line-color': '#369',
-                'curve-style': 'bezier',
+                //'curve-style': 'bezier',
                 'target-arrow-color': '#369',
                 'target-arrow-shape': 'triangle',
                 'label': 'data(label)',
@@ -29,48 +30,16 @@
     ],
 
     layout: {
-        name: 'grid',
-        rows: 1
+        name: 'circle',
+        radius: 120,
     }
 
 });
 
-cy.add([
-    { group: 'nodes', data: { id: 'n1' }, position: { x: 50, y: 200 } },
-    { group: 'nodes', data: { id: 'n2' }, position: { x: 131, y: 226 } },
-    { group: 'nodes', data: { id: 'n3' }, position: { x: 128, y: 143 } },
-    { group: 'nodes', data: { id: 'n4' }, position: { x: 249, y: 142 } },
-    { group: 'nodes', data: { id: 'n5' }, position: { x: 191, y: 62 } },
-    { group: 'nodes', data: { id: 'n6' }, position: { x: 66, y: 83 } },
-    { group: 'edges', data: { id: 'e0', source: 'n1', target: 'n2', label: 7 } },
-    { group: 'edges', data: { id: 'e1', source: 'n2', target: 'n3', label: 10 } },
-    { group: 'edges', data: { id: 'e2', source: 'n1', target: 'n6', label: 14 } },
-    { group: 'edges', data: { id: 'e3', source: 'n1', target: 'n3', label: 9 } },
-    { group: 'edges', data: { id: 'e4', source: 'n2', target: 'n4', label: 15 } },
-    { group: 'edges', data: { id: 'e5', source: 'n3', target: 'n4', label: 11 } },
-    { group: 'edges', data: { id: 'e6', source: 'n3', target: 'n6', label: 2 } },
-    { group: 'edges', data: { id: 'e7', source: 'n6', target: 'n5', label: 9 } },
-    { group: 'edges', data: { id: 'e8', source: 'n5', target: 'n4', label: 6 } },
-]);
-
-function addEdges() {
-
-    var amountOfEdge = cy.edges().length;
-    cy.add({
-        group: 'edges', data: {
-            id: 'e' + amountOfEdge,
-            source: document.getElementById('firstSelected').value,
-            target: document.getElementById('secondSelected').value,
-            label: document.getElementById('valueOfEdge').value,
-        }
-    });
-}
-
 window.onload = function () {
 
-    var element = document.getElementById("addBtn");;
+    var element = document.getElementById("defaultBtn");
     var className = "btn btn-primary margin-right";
-    var amountOfNode = cy.nodes().length;
 
     function supplayFunc(idElement) {
         element.className = className;
@@ -80,12 +49,9 @@ window.onload = function () {
         cy.removeListener('tap');
     }
 
-    cy.on('tap', function (evt) {
-        amountOfNode++;
-        cy.add({
-            group: 'nodes', data: { id: 'n' + amountOfNode },
-            renderedPosition: { x: evt.renderedPosition.x, y: evt.renderedPosition.y }
-        });
+    $("#defaultBtn").on('click', function (eventObject) {
+
+        supplayFunc("defaultBtn");
     });
 
     $("#deleteBtn").on('click', function (eventObject) {
@@ -107,6 +73,7 @@ window.onload = function () {
         supplayFunc("addBtn");
 
         cy.on('tap', function (evt) {
+            var amountOfNode = cy.nodes().length;
             amountOfNode++;
             cy.add({
                 group: 'nodes', data: { id: 'n' + amountOfNode },
@@ -140,5 +107,18 @@ window.onload = function () {
                 element.appendChild(child);
             }
         });
+    });
+}
+
+function addEdges() {
+
+    var amountOfEdge = cy.edges().length;
+    cy.add({
+        group: 'edges', data: {
+            id: 'e' + amountOfEdge,
+            source: document.getElementById('firstSelected').value,
+            target: document.getElementById('secondSelected').value,
+            label: document.getElementById('valueOfEdge').value,
+        }
     });
 }

@@ -83,11 +83,12 @@
     }
 
     function Submit() {
+        let text = document.getElementById('AdjacencyMatrixFieldPage').value;
 
         if (document.getElementById("commoSep").checked)
-            console.log(ParseTextInput('AdjacencyMatrixFieldPage', ','));
+            console.log(ParseTextInput(text, ','));
         else
-            console.log(ParseTextInput('AdjacencyMatrixFieldPage', ' '));
+            console.log(ParseTextInput(text, ' '));
     }
 
 </script>
@@ -151,4 +152,8 @@
     </div>
 </div>
 
-<button onclick="Submit()"> Парсить </button>
+<button class="btn-primary" onclick="Submit()"> Парсить </button>
+
+<p>
+
+</p>

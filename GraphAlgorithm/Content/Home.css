@@ -2,6 +2,7 @@
 }
 
 #cy {
+    min-height: 300px;
     display: block;
     background-color: #fff;
     border: 2px solid black;

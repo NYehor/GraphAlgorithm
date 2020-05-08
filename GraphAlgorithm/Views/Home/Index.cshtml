@@ -16,19 +16,31 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Graph
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Create</a>
-                <a class="dropdown-item" href="#">Open </a>
-                <a class="dropdown-item" href="#">Save </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Adjacency Matrix </a>
-                <a class="dropdown-item" href="#">Incidence Matrix </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Delete </a>
-            </div>
-        </li>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <li class="dropdown-item">Create</li>
+                <li class="dropdown-divider"></li>
 
-        <li type="button" class="btn btn-secondary margin-right" id="addBtn">Add</li>
+                <li id="tmpLi" class="dropdown-item">
+                    <label for="openFileBtn" style="width:inherit" accept=".txt">Open</label>
+                    <input id="openFileBtn" style="display:none;" type="file">
+                </li>
+
+                <li class="dropdown-item">
+                    <label data-toggle="modal" data-target="#saveDialog" style="width:inherit">Save</label>
+                </li>
+                <li class="dropdown-divider"></li>
+                <li class="dropdown-item">
+                    <label onclick="showMatrix()" style="width:inherit">Adjacency Matrix </label>
+                </li>
+                <li class="dropdown-item">Incidence Matrix</li>
+                <li class="dropdown-divider"></li>
+                <li class="dropdown-item">
+                    <label onclick="removeElement()" style="width:inherit">Delete</label>
+                </li>
+            </ul>
+        </li>
+        <li type="button" class="btn btn-secondary margin-right" id="defaultBtn">Default</li>
+        <li type="button" class="btn btn-primary margin-right" id="addBtn">Add</li>
 
         <li type="button" class="btn btn-primary margin-right" id="connectBtn">Connect</li>
 
@@ -58,8 +70,6 @@
 
 <div id="cy"></div>
 
-<script src="~/Scripts/CustomScripts/Index.js"></script>
-
 <script>
     function findDimensions() {
         var height = window.innerHeight; document.body.clientHeight;
@@ -73,7 +83,67 @@
     else if (window.attachEvent)
         window.attachEvent("onload", findDimensions);
     window.onresize = findDimensions;
+
+    document.getElementById("openFileBtn").addEventListener("change", function () {
+        var file = this.files[0];
+        var result = '';
+        if (file) 
+        {
+            var reader = new FileReader();
+
+            reader.onload = function (evt) {
+                result = evt.target.result;
+                console.log(result);
+                var matrix = ParseTextInput(result, ',');
+
+                cy.elements().remove();
+                cy.add(convertToElements(matrix));
+
+                cy.layout({
+                    name: 'circle',
+                    radius: 120,
+                }).run();
+            };
+
+            reader.onerror = function (evt) {
+                console.error("An error ocurred reading the file", evt);
+            };
+
+            reader.readAsText(file, "UTF-8");
+        }
+    }, false);
+
+    function removeElement() {
+        cy.elements().remove();
+    }
+
+    function showMatrix() {
+        console.log(getAdjacencyMatrix(cy));
+        var incidence = adjacencyToIncidence(getAdjacencyMatrix(cy));
+        console.log(incidence);
+        console.log(incidenceToAdjacency(incidence));
+
+    }
+
+    function download() {
+        var filename = 'name';
+        var text = 'TExt';
+
+        var element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+    }
+
 </script>
+
+<script src="~/Scripts/CustomScripts/Index.js"></script>
 
 <p>
 
@@ -97,10 +167,27 @@
                 </datalist>
             </div>
             <div class="modal-body text-center">
-                Вес: <input id="valueOfEdge">
+                Вес: <input id="valueOfEdge" value="0">
             </div>
             <div class="modal-footer text-md-center">      
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdges()">Создать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="saveDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Create file</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                Name:  <input type="text" id="fileName">
+                <button type="button" class="btn btn-primary" onclick="download()" data-dismiss="modal">Create</button>
             </div>
         </div>
     </div>

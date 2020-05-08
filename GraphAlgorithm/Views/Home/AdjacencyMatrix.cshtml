@@ -72,6 +72,14 @@
         CopyMatrixToTextInput();
     }
 
+    function Submit() {
+        let text = document.getElementById('AdjacencyMatrixFieldPage').value;
+
+        if (document.getElementById("commoSep").checked)
+            console.log(ParseTextInput(text, ','));
+        else
+            console.log(ParseTextInput(text, ' '));
+    }
 </script>
 
 <p>
@@ -127,7 +135,8 @@
             <textarea id="AdjacencyMatrixFieldPage" rows="10" cols="30">
 0, 0, 0
 0, 0, 0
-0, 0, 0</textarea>
+0, 0, 0
+</textarea>
             <div id="idSeparatorList">
                 Разделитель: <input type="radio" name="separator" value="commo" id="commoSep" checked><label for="commoSep">запятая</label>
                 <input type="radio" name="separator" value="space" id="spaceSep"> <label for="spaceSep">пробел</label>
@@ -138,3 +147,9 @@
         </p>
     </div>
 </div>
+
+<button class="btn-primary" onclick="Submit()"> Парсить </button>
+
+<p>
+
+</p>
