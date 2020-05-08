@@ -94,15 +94,9 @@
             reader.onload = function (evt) {
                 result = evt.target.result;
                 console.log(result);
-                var matrix = ParseTextInput(result, ',');
+                var matrix = parseTextInput(result, ',');
 
-                cy.elements().remove();
-                cy.add(convertToElements(matrix));
-
-                cy.layout({
-                    name: 'circle',
-                    radius: 120,
-                }).run();
+                loadNewGraph(matrix, true)
             };
 
             reader.onerror = function (evt) {
@@ -118,8 +112,8 @@
     }
 
     function showMatrix() {
-        console.log(getAdjacencyMatrix(cy));
-        var incidence = adjacencyToIncidence(getAdjacencyMatrix(cy));
+        console.log(getAdjacencyMatrix());
+        var incidence = adjacencyToIncidence(getAdjacencyMatrix());
         console.log(incidence);
         console.log(incidenceToAdjacency(incidence));
 

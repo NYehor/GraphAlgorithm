@@ -1,10 +1,13 @@
-﻿let cy = cytoscape({
+﻿var amountOfNode = 0;
+var amountOfEdge = 0;
 
-    container: document.getElementById('cy'), // container to render in
+let cy = cytoscape({
+
+    container: document.getElementById('cy'), 
 
     elements: [],
 
-    style: [ // the stylesheet for the graph
+    style: [ 
         {
             selector: 'node',
             style: {
@@ -27,13 +30,7 @@
                 'color': '#777'
             }
         }
-    ],
-
-    layout: {
-        name: 'circle',
-        radius: 120,
-    }
-
+    ]
 });
 
 window.onload = function () {
@@ -59,7 +56,6 @@ window.onload = function () {
         supplayFunc("deleteBtn");
 
         cy.on('tap', function (evt) {
-
             var node = evt.target;
 
             if (node != evt.cy)
@@ -73,7 +69,6 @@ window.onload = function () {
         supplayFunc("addBtn");
 
         cy.on('tap', function (evt) {
-            var amountOfNode = cy.nodes().length;
             amountOfNode++;
             cy.add({
                 group: 'nodes', data: { id: 'n' + amountOfNode },
@@ -111,14 +106,85 @@ window.onload = function () {
 }
 
 function addEdges() {
-
-    var amountOfEdge = cy.edges().length;
+    amountOfEdge++;
     cy.add({
         group: 'edges', data: {
             id: 'e' + amountOfEdge,
             source: document.getElementById('firstSelected').value,
             target: document.getElementById('secondSelected').value,
+            directed: false,
             label: document.getElementById('valueOfEdge').value,
         }
     });
 }
+
+function loadNewGraph(matrix, adjacency) {
+
+    if (!adjacency)
+        matrix = incidenceToAdjacency(matrix);
+
+    cy.elements().remove();
+    cy.add(convertToElements(matrix));
+
+    cy.layout({
+        name: 'circle',
+        radius: 120,
+    }).run();
+
+    amountOfNode = cy.nodes().length;
+    amountOfEdge = cy.edges().length;
+}
+
+function getAdjacencyMatrix() {
+
+    var elementLength = cy.elements().length;
+    if (elementLength == 0)
+        return '';
+
+    var matrix = [];
+    matrix.length = cy.nodes().length;
+    for (var i = 0; i < matrix.length; i++) {
+        matrix[i] = [];
+        matrix[i].length = matrix.length;
+        for (var j = 0; j < matrix.length; j++) {
+            matrix[i][j] = 0;
+        }
+    }
+    var dict = {};
+    for (var i = 0; i < matrix.length; i++) {
+        dict[cy.nodes()[i].data('id')] = i;
+    }
+
+    var len = parseInt(cy.edges().length);
+
+    if (len == 0)
+        return matrix;
+
+    for (var i = 0; i < len; i++) {
+
+        var source = cy.edges()[i].data('source');
+        var target = cy.edges()[i].data('target');
+
+        matrix[dict[source]][dict[target]] = parseInt(cy.elements().edges()[i].data('label'));
+    }
+
+    var condition = cy.edges()[0].data('directed');
+    if (!condition) {
+        for (var i = 0; i < matrix.length; i++) {
+            for (var j = 0; j < i; j++) {
+
+                if (i == j) continue;
+
+                if (matrix[j][i] == 0)
+                    matrix[j][i] = matrix[i][j];
+                else
+                    matrix[i][j] = matrix[j][i];
+            }
+        }
+    }
+
+    return matrix;
+}
+
+
+

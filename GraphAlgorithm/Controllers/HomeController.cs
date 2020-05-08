@@ -24,7 +24,7 @@ namespace GraphAlgorithm.Controllers
             return View();
         }
 
-        public ActionResult KruskalAlgorithm()
+        public ActionResult KruskalAlgorithm(int[][] matrix)
         {
             var INF = int.MaxValue;
 
@@ -76,7 +76,7 @@ namespace GraphAlgorithm.Controllers
                 }
             }
 
-            //some view or Json response
+           
             return View("Index");
         }
     }
