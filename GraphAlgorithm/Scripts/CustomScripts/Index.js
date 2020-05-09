@@ -1,5 +1,6 @@
 ﻿var amountOfNode = 0;
 var amountOfEdge = 0;
+var isOrientedGraph = true;
 
 let cy = cytoscape({
 
@@ -116,7 +117,7 @@ function addEdges() {
             id: 'e' + amountOfEdge,
             source: document.getElementById('firstSelected').value,
             target: document.getElementById('secondSelected').value,
-            directed: false,
+            directed: isOrientedGraph,
             label: val,
         }
     });
@@ -190,5 +191,80 @@ function getAdjacencyMatrix() {
     return matrix;
 }
 
+function removeElement() {
+    var amountOfNode = 0;
+    var amountOfEdge = 0;
+    cy.elements().remove();
+}
 
+function showMatrix() {
+    console.log(getAdjacencyMatrix());
+    var incidence = adjacencyToIncidence(getAdjacencyMatrix());
+    console.log(incidence);
+    console.log(incidenceToAdjacency(incidence));
+
+}
+
+function download() {
+    var filename = document.getElementById('fileName').value;
+    var matrix = getAdjacencyMatrix();
+    var text = matrixToString(matrix);
+
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+function showIncidence() {
+    $('#showIncidenceMatrix').modal();
+    var matrix = getAdjacencyMatrix();
+    matrix = adjacencyToIncidence(matrix);
+    document.getElementById('textIncidenceMatrix').value = matrixToString(matrix);
+}
+
+function showAdjacency() {
+    $('#showAdjacencyMatrix').modal();
+    var matrix = getAdjacencyMatrix();
+    document.getElementById('textAdjacencyMatrix').value = matrixToString(matrix);
+}
+
+function matrixToString(matrix) {
+    var strValue = '';
+    for (var i = 0; i < matrix.length; i++) {
+        for (var j = 0; j < matrix[0].length; j++) {
+            strValue += matrix[i][j].toString() + ", ";
+        }
+        strValue += '\n';
+    }
+    return strValue;
+}
+
+function adjacencySaveChanges() {
+    var text = document.getElementById('textAdjacencyMatrix').value;
+    var matrix = parseTextInput(text, ',');
+    loadNewGraph(matrix, true)
+}
+
+function incidenceSaveChanges() {
+    var text = document.getElementById('textIncidenceMatrix').value;
+    var matrix = parseTextInput(text, ',');
+    loadNewGraph(matrix, false)
+}
+
+function createOrientedGraph() {
+    cy.elements().remove();
+    isOrientedGraph = true;
+}
+
+function createDisorientedGraph() {
+    cy.elements().remove();
+    isOrientedGraph = false;
+}
 

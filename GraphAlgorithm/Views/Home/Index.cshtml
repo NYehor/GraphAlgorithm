@@ -16,12 +16,17 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                <li class="dropdown-item">Створити</li>
+                <li class="dropdown-item" style="width:inherit">
+                    <label data-toggle="modal" onclick="createOrientedGraph()" style="width:inherit">Створити орієнтований граф</label>
+                </li>
+                <li class="dropdown-item" style="width:inherit">
+                    <label data-toggle="modal" onclick="createDisorientedGraph()" style="width:inherit">Створити неорієнтований граф</label>
+                </li>
                 <li class="dropdown-divider"></li>
 
                 <li id="tmpLi" class="dropdown-item">
                     <label for="openFileBtn" style="width:inherit" accept=".txt">Відкрити</label>
-                    <input id="openFileBtn" style="display:none;" type="file">
+                    <input id="openFileBtn" onclick="this.value=null;" style="display:none;" type="file">
                 </li>
 
                 <li class="dropdown-item">
@@ -33,7 +38,7 @@
                 </li>
                 <li class="dropdown-item">
 
-                <label onclick="showIncidence()" style="width:inherit" >Матриця інцидентності</label>
+                    <label onclick="showIncidence()" style="width:inherit">Матриця інцидентності</label>
 
                 </li>
                 <li class="dropdown-divider"></li>
@@ -90,8 +95,7 @@
     document.getElementById("openFileBtn").addEventListener("change", function () {
         var file = this.files[0];
         var result = '';
-        if (file) 
-        {
+        if (file) {
             var reader = new FileReader();
 
             reader.onload = function (evt) {
@@ -108,71 +112,6 @@
             reader.readAsText(file, "UTF-8");
         }
     }, false);
-
-    function removeElement() {
-        cy.elements().remove();
-    }
-
-    function showMatrix() {
-        console.log(getAdjacencyMatrix());
-        var incidence = adjacencyToIncidence(getAdjacencyMatrix());
-        console.log(incidence);
-        console.log(incidenceToAdjacency(incidence));
-
-    }
-
-    function download() {
-        var filename = document.getElementById('fileName').value;
-        var matrix = getAdjacencyMatrix();
-        var text = matrixToString(matrix);
-
-        var element = document.createElement('a');
-        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-        element.setAttribute('download', filename);
-
-        element.style.display = 'none';
-        document.body.appendChild(element);
-
-        element.click();
-
-        document.body.removeChild(element);
-    }
-
-    function showIncidence() {
-        $('#showIncidenceMatrix').modal();
-        var matrix = getAdjacencyMatrix();
-        matrix = adjacencyToIncidence(matrix);
-        document.getElementById('textIncidenceMatrix').value = matrixToString(matrix);  
-    }
-
-    function showAdjacency() {
-        $('#showAdjacencyMatrix').modal();
-        var matrix = getAdjacencyMatrix();
-        document.getElementById('textAdjacencyMatrix').value = matrixToString(matrix);
-    }
-
-    function matrixToString(matrix) {
-        var strValue = '';
-        for (var i = 0; i < matrix.length; i++) {
-            for (var j = 0; j < matrix[0].length; j++) {
-                strValue += matrix[i][j].toString() + ", ";
-            }
-            strValue += '\n';
-        }
-        return strValue;
-    }
-
-    function adjacencySaveChanges() {
-        var text = document.getElementById('textAdjacencyMatrix').value;
-        var matrix = parseTextInput(text, ',');
-        loadNewGraph(matrix, true)
-    }
-
-    function incidenceSaveChanges() {
-        var text = document.getElementById('textIncidenceMatrix').value;
-        var matrix = parseTextInput(text, ',');
-        loadNewGraph(matrix, false)
-    }
 </script>
 
 <script src="~/Scripts/CustomScripts/Index.js"></script>
