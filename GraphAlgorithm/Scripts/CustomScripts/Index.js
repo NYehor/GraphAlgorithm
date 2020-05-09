@@ -23,7 +23,7 @@ let cy = cytoscape({
             style: {
                 'width': 2,
                 'line-color': '#369',
-                //'curve-style': 'bezier',
+                'curve-style': 'bezier',
                 'target-arrow-color': '#369',
                 'target-arrow-shape': 'triangle',
                 'label': 'data(label)',
@@ -123,12 +123,30 @@ function addEdges() {
     });
 }
 
+function isOriented(matrix) {
+    var flag = false;
+
+    for (var i = 0; i < matrix.length; i++) 
+        for (var j = 0; j < matrix.length; j++) {
+            if (matrix[i][j] != matrix[j][i]) {
+                flag = true;
+                return flag;
+            }              
+        }
+
+    return flag
+}
+
 function loadNewGraph(matrix, adjacency) {
 
     if (!adjacency)
         matrix = incidenceToAdjacency(matrix);
 
-    cy.elements().remove();
+    if (isOriented(matrix))
+        createOrientedGraph();
+    else
+        createDisorientedGraph();
+
     cy.add(convertToElements(matrix));
 
     cy.layout({
@@ -192,17 +210,9 @@ function getAdjacencyMatrix() {
 }
 
 function removeElement() {
-    var amountOfNode = 0;
-    var amountOfEdge = 0;
+    amountOfNode = 0;
+    amountOfEdge = 0;
     cy.elements().remove();
-}
-
-function showMatrix() {
-    console.log(getAdjacencyMatrix());
-    var incidence = adjacencyToIncidence(getAdjacencyMatrix());
-    console.log(incidence);
-    console.log(incidenceToAdjacency(incidence));
-
 }
 
 function download() {
@@ -259,12 +269,21 @@ function incidenceSaveChanges() {
 }
 
 function createOrientedGraph() {
-    cy.elements().remove();
+    removeElement();
     isOrientedGraph = true;
+
+    cy.style().selector('edge')
+        .style({
+            'target-arrow-color': '#369',
+            'target-arrow-shape': 'triangle',
+        }).update();
 }
 
 function createDisorientedGraph() {
-    cy.elements().remove();
+    removeElement();
     isOrientedGraph = false;
+
+    cy.style().selector('edge')
+        .style('target-arrow-shape', 'none').update();
 }
 

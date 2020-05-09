@@ -1,15 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using GraphAlgorithm.Models;
 using GraphAlgorithm.Services;
 
 namespace GraphAlgorithm.Controllers
 {
     public class HomeController : Controller
     {
+        [HttpPost]
+        public ActionResult SetMatrix(IndexViewModel indexViewModel = null)
+        {
+            return View("Index", indexViewModel);
+        } 
         public ActionResult Index()
         {
-            return View();
+                return View("Index", new IndexViewModel());
         }
 
         public ActionResult AdjacencyMatrix()
@@ -23,6 +29,7 @@ namespace GraphAlgorithm.Controllers
 
             return View();
         }
+
 
         public ActionResult KruskalAlgorithm(int[][] matrix)
         {

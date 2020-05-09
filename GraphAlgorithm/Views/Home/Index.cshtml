@@ -1,8 +1,11 @@
-﻿@{
+﻿@model GraphAlgorithm.Models.IndexViewModel
+
+@{
     ViewBag.Title = "Головна сотрінка";
 }
 
 @Scripts.Render("~/bundles/Scripts")
+
 <link rel="stylesheet" href="~/Content/Home.css">
 <p>
 
@@ -116,6 +119,19 @@
 
 <script src="~/Scripts/CustomScripts/Index.js"></script>
 
+<script>
+    var strMatrix = @Html.Raw(Json.Encode(Model.Matrix));
+    var type = @Html.Raw(Json.Encode(Model.TypeOfMatrix));
+    var separator = @Html.Raw(Json.Encode(Model.Separator));
+
+    if (strMatrix != '' && separator != null) {
+        var matrix = parseTextInput(strMatrix, separator);
+        if (type == "adjacency")
+            loadNewGraph(matrix, true);
+        else
+            loadNewGraph(matrix, false);
+    }    
+</script>
 <p>
 
 </p>
@@ -134,13 +150,13 @@
                 <b> -> </b>
                 <input id="secondSelected" list="browsers">
 
-                <datalist id="browsers"> 
+                <datalist id="browsers">
                 </datalist>
             </div>
             <div class="modal-body text-center">
                 Вага: <input id="valueOfEdge" value="0">
             </div>
-            <div class="modal-footer text-md-center">      
+            <div class="modal-footer text-md-center">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdges()">Створити</button>
             </div>
         </div>

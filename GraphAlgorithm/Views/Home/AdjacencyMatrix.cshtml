@@ -72,13 +72,16 @@
         CopyMatrixToTextInput();
     }
 
-    function Submit() {
-        let text = document.getElementById('AdjacencyMatrixFieldPage').value;
+    function Submit() {      
+        if (document.getElementById("commoSep").checked) {
+            document.getElementById('separatorID').value = ',';
+        }
+        else {
+            document.getElementById('separatorID').value = ' ';
+        }
 
-        if (document.getElementById("commoSep").checked)
-            console.log(ParseTextInput(text, ','));
-        else
-            console.log(ParseTextInput(text, ' '));
+        document.getElementById('isAdjacency').value = "adjacency";
+        $('#AdjacencyMatrixForm').submit();
     }
 </script>
 
@@ -131,8 +134,10 @@
         </div>
     </div>
     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-        <form>
-            <textarea id="AdjacencyMatrixFieldPage" rows="10" cols="30">
+        <form id="AdjacencyMatrixForm" method="post" action="@Url.Action("SetMatrix")">
+            <input name="TypeOfMatrix" id="isAdjacency" type="text" value = "adjacency" style="display:none" />
+            <input name="Separator" id="separatorID" type="text" value = "adjacency" style="display:none" />
+            <textarea name="Matrix" id="AdjacencyMatrixFieldPage" rows="10" cols="30">
 0, 0, 0
 0, 0, 0
 0, 0, 0

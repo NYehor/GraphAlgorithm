@@ -123,6 +123,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\IndexViewModel.cs" />
     <Compile Include="Services\FloydWarshall\FloydWarshallSecondAlgorithm.cs" />
     <Compile Include="Services\FloydWarshall\ListArray2DConverter.cs" />
     <Compile Include="Services\HamiltonianCycleAlgirithmService.cs" />
@@ -279,7 +280,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
