@@ -4,11 +4,9 @@
 
 @Scripts.Render("~/bundles/Scripts")
 <link rel="stylesheet" href="~/Content/Home.css">
-
 <p>
 
 </p>
-
 <section>
     <ul class="nav nav-pills">
         <li class="dropdown">
@@ -17,6 +15,7 @@
                 Граф
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
                 <li class="dropdown-item">Створити</li>
                 <li class="dropdown-divider"></li>
 
@@ -33,7 +32,9 @@
                     <label onclick="showAdjacency()" style="width:inherit">Матриця суміжності</label>
                 </li>
                 <li class="dropdown-item">
-                    <label onclick="showIncidence()" style="width:inherit" >Матриця інцидентності</label>
+
+                <label onclick="showIncidence()" style="width:inherit" >Матриця інцидентності</label>
+
                 </li>
                 <li class="dropdown-divider"></li>
                 <li class="dropdown-item">
@@ -121,8 +122,9 @@
     }
 
     function download() {
-        var filename = 'name';
-        var text = 'TExt';
+        var filename = document.getElementById('fileName').value;
+        var matrix = getAdjacencyMatrix();
+        var text = matrixToString(matrix);
 
         var element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
