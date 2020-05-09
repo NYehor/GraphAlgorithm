@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Головна сотрінка";
 }
 
 @Scripts.Render("~/bundles/Scripts")
@@ -14,49 +14,49 @@
         <li class="dropdown">
             <button class="btn btn-primary dropdown-toggle margin-right" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Graph
+                Граф
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li class="dropdown-item">Create</li>
+                <li class="dropdown-item">Створити</li>
                 <li class="dropdown-divider"></li>
 
                 <li id="tmpLi" class="dropdown-item">
-                    <label for="openFileBtn" style="width:inherit" accept=".txt">Open</label>
+                    <label for="openFileBtn" style="width:inherit" accept=".txt">Відкрити</label>
                     <input id="openFileBtn" style="display:none;" type="file">
                 </li>
 
                 <li class="dropdown-item">
-                    <label data-toggle="modal" data-target="#saveDialog" style="width:inherit">Save</label>
+                    <label data-toggle="modal" data-target="#saveDialog" style="width:inherit">Зберегти</label>
                 </li>
                 <li class="dropdown-divider"></li>
                 <li class="dropdown-item">
-                    <label onclick="showAdjacency()" style="width:inherit">Adjacency Matrix </label>
+                    <label onclick="showAdjacency()" style="width:inherit">Матриця суміжності</label>
                 </li>
                 <li class="dropdown-item">
-                    <label onclick="showIncidence()" style="width:inherit" >Incidence Matrix</label>
+                    <label onclick="showIncidence()" style="width:inherit" >Матриця інцидентності</label>
                 </li>
                 <li class="dropdown-divider"></li>
                 <li class="dropdown-item">
-                    <label onclick="removeElement()" style="width:inherit">Delete</label>
+                    <label onclick="removeElement()" style="width:inherit">Видалити</label>
                 </li>
             </ul>
         </li>
-        <li type="button" class="btn btn-secondary margin-right" id="defaultBtn">Default</li>
-        <li type="button" class="btn btn-primary margin-right" id="addBtn">Add</li>
+        <li type="button" class="btn btn-secondary margin-right" id="defaultBtn">За замовчуванням</li>
+        <li type="button" class="btn btn-primary margin-right" id="addBtn">Додати</li>
 
-        <li type="button" class="btn btn-primary margin-right" id="connectBtn">Connect</li>
+        <li type="button" class="btn btn-primary margin-right" id="connectBtn">З'єднати</li>
 
         <li class="dropdown">
             <button class="btn btn-primary dropdown-toggle margin-right" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Algorithm
+                Алгоритм
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                @Html.ActionLink("Kruskal's Algorithm", "KruskalAlgorithm", "Home", new { @class = "dropdown-item" })
+                @Html.ActionLink("Алгоритм Крускала", "KruskalAlgorithm", "Home", new { @class = "dropdown-item" })
             </div>
         </li>
 
-        <li type="button" class="btn btn-primary margin-right" id="deleteBtn">Delete</li>
+        <li type="button" class="btn btn-primary margin-right" id="deleteBtn">Видалити</li>
 
     </ul>
 </section>
@@ -66,7 +66,7 @@
 
 <section>
     <div id="message" class="alert alert-success">
-        Text
+        Текст
     </div>
 </section>
 
@@ -183,8 +183,8 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Создать ребро</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="exampleModalLongTitle">Створити ребро</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -197,10 +197,10 @@
                 </datalist>
             </div>
             <div class="modal-body text-center">
-                Вес: <input id="valueOfEdge" value="0">
+                Вага: <input id="valueOfEdge" value="0">
             </div>
             <div class="modal-footer text-md-center">      
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdges()">Создать</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdges()">Створити</button>
             </div>
         </div>
     </div>
@@ -210,14 +210,14 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalCenterTitle">Create file</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Створити файл</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body text-center">
-                Name:  <input type="text" id="fileName">
-                <button type="button" class="btn btn-primary" onclick="download()" data-dismiss="modal">Create</button>
+                Ім'я:  <input type="text" id="fileName">
+                <button type="button" class="btn btn-primary" onclick="download()" data-dismiss="modal">Створити</button>
             </div>
         </div>
     </div>
@@ -227,18 +227,18 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Adjacency Matrix</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title">Матриця суміжності</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Задайте матрицу смежности. Используйте запятую "," в качестве разделителя</p>
+                <p>Задайте матрицю суміжності. Використовуйте кому "," в якості розділового знаку</p>
                 <textarea id="textAdjacencyMatrix" class="form-control" style="min-width: 100%; min-height:200px"></textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="adjacencySaveChanges()" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                <button type="button" onclick="adjacencySaveChanges()" class="btn btn-primary" data-dismiss="modal">Зберегти</button>
             </div>
         </div>
     </div>
@@ -248,18 +248,18 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Incidence Matrix</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title">Матриця інцидентності</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Задайте матрицу смежности. Используйте запятую "," в качестве разделителя</p>
+                <p>Задайте матрицю інцидентності. Використовуйте кому "," в якості розділового знаку</p>
                 <textarea id="textIncidenceMatrix" class="form-control" style="min-width: 100%; min-height:200px"></textarea>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" onclick="incidenceSaveChanges()" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                <button type="button" onclick="incidenceSaveChanges()" class="btn btn-primary" data-dismiss="modal">Зберегти</button>
             </div>
         </div>
     </div>

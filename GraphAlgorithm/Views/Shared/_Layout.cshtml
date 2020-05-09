@@ -11,19 +11,19 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            @Html.ActionLink("Graph algorithm", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @*@Html.ActionLink("Graph algorithm", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#layoutNavbarSupportedContent"
                     aria-controls="layoutNavbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
-            </button>
+            </button>*@
             <div class="collapse navbar-collapse" id="layoutNavbarSupportedContent">
                 <ul class="navbar-nav mr-auto ">
-                    <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Головна сторінка", "Index", "Home", new { @class = "nav-link" })</li>
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Graph</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Граф</a>
                         <div class="dropdown-menu">
-                            @Html.ActionLink("AdjacencyMatrix", "AdjacencyMatrix", "Home", new { @class = "dropdown-item" })
-                            @Html.ActionLink("IncindenceMatrix", "IncindenceMatrix", "Home", new { @class = "dropdown-item" })
+                            @Html.ActionLink("Матриця суміжності", "AdjacencyMatrix", "Home", new { @class = "dropdown-item" })
+                            @Html.ActionLink("Матриця інцидентності", "IncindenceMatrix", "Home", new { @class = "dropdown-item" })
 
                         </div>
                     </li>
