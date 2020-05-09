@@ -4,11 +4,9 @@
 
 @Scripts.Render("~/bundles/Scripts")
 <link rel="stylesheet" href="~/Content/Home.css">
-
 <p>
 
 </p>
-
 <section>
     <ul class="nav nav-pills">
         <li class="dropdown">
@@ -18,11 +16,12 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <li class="dropdown-item">Create</li>
+
                 <li class="dropdown-divider"></li>
 
                 <li id="tmpLi" class="dropdown-item">
                     <label for="openFileBtn" style="width:inherit" accept=".txt">Open</label>
-                    <input id="openFileBtn" style="display:none;" type="file">
+                    <input id="openFileBtn" onclick="this.value=null;" style="display:none;" type="file">
                 </li>
 
                 <li class="dropdown-item">
@@ -33,7 +32,7 @@
                     <label onclick="showAdjacency()" style="width:inherit">Adjacency Matrix </label>
                 </li>
                 <li class="dropdown-item">
-                    <label onclick="showIncidence()" style="width:inherit" >Incidence Matrix</label>
+                    <label onclick="showIncidence()" style="width:inherit">Incidence Matrix</label>
                 </li>
                 <li class="dropdown-divider"></li>
                 <li class="dropdown-item">
@@ -121,8 +120,9 @@
     }
 
     function download() {
-        var filename = 'name';
-        var text = 'TExt';
+        var filename = document.getElementById('fileName').value;
+        var matrix = getAdjacencyMatrix();
+        var text = matrixToString(matrix);
 
         var element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
