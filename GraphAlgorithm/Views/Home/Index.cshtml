@@ -30,9 +30,11 @@
                 </li>
                 <li class="dropdown-divider"></li>
                 <li class="dropdown-item">
-                    <label onclick="showMatrix()" style="width:inherit">Adjacency Matrix </label>
+                    <label onclick="showAdjacency()" style="width:inherit">Adjacency Matrix </label>
                 </li>
-                <li class="dropdown-item">Incidence Matrix</li>
+                <li class="dropdown-item">
+                    <label onclick="showIncidence()" style="width:inherit" >Incidence Matrix</label>
+                </li>
                 <li class="dropdown-divider"></li>
                 <li class="dropdown-item">
                     <label onclick="removeElement()" style="width:inherit">Delete</label>
@@ -93,9 +95,8 @@
 
             reader.onload = function (evt) {
                 result = evt.target.result;
-                console.log(result);
-                var matrix = parseTextInput(result, ',');
 
+                var matrix = parseTextInput(result, ',');
                 loadNewGraph(matrix, true)
             };
 
@@ -135,6 +136,41 @@
         document.body.removeChild(element);
     }
 
+    function showIncidence() {
+        $('#showIncidenceMatrix').modal();
+        var matrix = getAdjacencyMatrix();
+        matrix = adjacencyToIncidence(matrix);
+        document.getElementById('textIncidenceMatrix').value = matrixToString(matrix);  
+    }
+
+    function showAdjacency() {
+        $('#showAdjacencyMatrix').modal();
+        var matrix = getAdjacencyMatrix();
+        document.getElementById('textAdjacencyMatrix').value = matrixToString(matrix);
+    }
+
+    function matrixToString(matrix) {
+        var strValue = '';
+        for (var i = 0; i < matrix.length; i++) {
+            for (var j = 0; j < matrix[0].length; j++) {
+                strValue += matrix[i][j].toString() + ", ";
+            }
+            strValue += '\n';
+        }
+        return strValue;
+    }
+
+    function adjacencySaveChanges() {
+        var text = document.getElementById('textAdjacencyMatrix').value;
+        var matrix = parseTextInput(text, ',');
+        loadNewGraph(matrix, true)
+    }
+
+    function incidenceSaveChanges() {
+        var text = document.getElementById('textIncidenceMatrix').value;
+        var matrix = parseTextInput(text, ',');
+        loadNewGraph(matrix, false)
+    }
 </script>
 
 <script src="~/Scripts/CustomScripts/Index.js"></script>
@@ -182,6 +218,48 @@
             <div class="modal-body text-center">
                 Name:  <input type="text" id="fileName">
                 <button type="button" class="btn btn-primary" onclick="download()" data-dismiss="modal">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="showAdjacencyMatrix" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Adjacency Matrix</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Задайте матрицу смежности. Используйте запятую "," в качестве разделителя</p>
+                <textarea id="textAdjacencyMatrix" class="form-control" style="min-width: 100%; min-height:200px"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="adjacencySaveChanges()" class="btn btn-primary" data-dismiss="modal">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="showIncidenceMatrix" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Incidence Matrix</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Задайте матрицу смежности. Используйте запятую "," в качестве разделителя</p>
+                <textarea id="textIncidenceMatrix" class="form-control" style="min-width: 100%; min-height:200px"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="incidenceSaveChanges()" class="btn btn-primary" data-dismiss="modal">Save changes</button>
             </div>
         </div>
     </div>

@@ -107,13 +107,17 @@ window.onload = function () {
 
 function addEdges() {
     amountOfEdge++;
+    var val = document.getElementById('valueOfEdge').value;
+    if (val == '')
+        val = '1';
+
     cy.add({
         group: 'edges', data: {
             id: 'e' + amountOfEdge,
             source: document.getElementById('firstSelected').value,
             target: document.getElementById('secondSelected').value,
             directed: false,
-            label: document.getElementById('valueOfEdge').value,
+            label: val,
         }
     });
 }
