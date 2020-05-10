@@ -376,6 +376,19 @@ document.getElementById('floydWarshallSecondAlgorithmId').addEventListener('clic
     }
 })
 
+document.getElementById('maxMatchesAlgorithmId').addEventListener('click', function () {
+    var graphMatrix = getAdjacencyMatrix();
+    var matrix = JSON.stringify(graphMatrix);
+
+    if (graphMatrix.length > 0) {
+
+        $.get('/Home/MaxMatchesAlgorithm', $.param({ data: matrix }, true), function (data) {
+
+            dialogShowMatrix("", JSON.parse(data));
+        });
+    }
+})
+
 document.getElementById('dijkstraAlgorithmId').addEventListener('click', function () {
     var graphMatrix = getAdjacencyMatrix();
     var matrix = JSON.stringify(graphMatrix);

@@ -119,6 +119,17 @@ namespace GraphAlgorithm.Controllers
             return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult MaxMatchesAlgorithm(string data)
+        {
+            List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+
+            if (matrix == null) return null;
+            var method = new MaxMatches();
+            var resultMatrix = method.Resolve(matrix, false);
+
+            return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult DijkstraAlgorithm(string data, int start)
         {
             List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
