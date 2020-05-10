@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace GraphAlgorithm.Services
+namespace SearchTree
 {
-    public interface IMethod
+    interface IMethod
     {
-      
     }
 }
