@@ -7,18 +7,24 @@ namespace GraphAlgorithm.Services
     class Dijkstra
     {
         const double INF = double.PositiveInfinity;
-        List<List<double>> AdjacencyMatrix;
+        public List<List<double>> AdjacencyMatrix = new List<List<double>>
+        {
+            new List<double> { INF, 2,   INF, 6,   INF  },
+            new List<double> { 2,   INF, 4,   INF, 8   },
+            new List<double> { INF, 4,   INF, 6,   2   },
+            new List<double> { 6,   INF, 6,   INF, 4    },
+            new List<double> { INF, 8,   2,   4,   INF }
+        };
 
         private Graph graph;
 
         //TODO: set matrix here
-        public Dijkstra(List<List<double>> AdjacencyMatrix)
+        public Dijkstra()
         {
-            this.AdjacencyMatrix = AdjacencyMatrix;
             graph = new Graph(AdjacencyMatrix);
         }
 
-        public string Resolve(int startVertice)
+        public object Resolve(int startVertice)
         {
             var currentVertice = graph.Vertices[startVertice - 1];
             double currentPathLength = 0;
@@ -60,12 +66,12 @@ namespace GraphAlgorithm.Services
             string strResult = string.Empty;
             foreach (var r in result)
             {
-                strResult += r.ToString() + '\n';
+                strResult += r.ToString();
                 Console.WriteLine(r.ToString());
             }
 
             
-            return strResult;
+            return result;
         }
 
         private double getTransitionWeight(Vertice from, Vertice to)

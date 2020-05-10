@@ -122,6 +122,19 @@ namespace GraphAlgorithm.Controllers
             return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult DijkstraAlgorithm(string data, int start)
+        {
+            List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+
+            if (matrix == null) return null;
+
+            matrix = replaceZeroToInf(matrix);
+            var method = new Dijkstra(matrix);
+            var resultMatrix = method.Resolve(start);  
+
+            return Json(resultMatrix, JsonRequestBehavior.AllowGet);
+        }
+
         private List<List<double>> replaceZeroToInf(List<List<double>> matrix)
         {
             var INF = double.PositiveInfinity;

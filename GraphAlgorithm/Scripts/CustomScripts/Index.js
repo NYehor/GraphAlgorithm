@@ -302,9 +302,9 @@ function toStr(matrix) {
 
 function dialogShowMatrix(text, matrix) {
 
-    var message = document.getElementById('message');
     var str = toStr(matrix);
 
+    var message = document.getElementById('message');
     while (message.firstChild)
         message.removeChild(message.firstChild);
 
@@ -359,6 +359,23 @@ document.getElementById('hamiltonianCycleAlgorithmId').addEventListener('click',
 
             var message = "path: " + data.path;
             dialogShowMatrix(message, data.matrix);
+        });
+    }
+})
+
+document.getElementById('dijkstraAlgorithmId').addEventListener('click', function () {
+    var graphMatrix = getAdjacencyMatrix();
+    var matrix = JSON.stringify(graphMatrix);
+
+    if (graphMatrix.length > 0) {
+
+        $.get('/Home/DijkstraAlgorithm', $.param({ data: matrix, start: 1 }, true), function (data) {
+
+            var message = document.getElementById('message');
+            while (message.firstChild)
+                message.removeChild(message.firstChild);
+
+            message.textContent = data;
         });
     }
 })

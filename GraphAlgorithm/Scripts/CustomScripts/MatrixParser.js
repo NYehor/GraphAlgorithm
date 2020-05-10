@@ -40,7 +40,7 @@ function convertToElements(matrix) {
 
     for (var i = 0; i < matrix.length; i++) {
 
-        elements.push({ group: 'nodes', data: { id: 'n' + i } });
+        elements.push({ group: 'nodes', data: { id: 'n' + (i+1) } });
     }
 
     var state = isDirection(matrix);
@@ -50,7 +50,7 @@ function convertToElements(matrix) {
             if (matrix[i][j] != 0) {
                 elements.push({
                     group: 'edges',
-                    data: { id: 'e' + index, source: 'n' + i, target: 'n' + j, label: matrix[i][j], directed: state }
+                    data: { id: 'e' + index, source: 'n' + (i + 1), target: 'n' + (j + 1), label: matrix[i][j], directed: state }
                 });
                 index++;
             }
@@ -58,7 +58,7 @@ function convertToElements(matrix) {
                 if (matrix[j][i] != 0) {
                     elements.push({
                         group: 'edges',
-                        data: { id: 'e' + index, source: 'n' + j, target: 'n' + i, label: matrix[j][i], directed: state }
+                        data: { id: 'e' + index, source: 'n' + (j + 1), target: 'n' + (i + 1), label: matrix[j][i], directed: state }
                     });
                     index++;
                 }
