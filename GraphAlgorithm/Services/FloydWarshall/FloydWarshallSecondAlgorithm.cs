@@ -9,18 +9,13 @@ namespace GraphAlgorithm.Services.FloydWarshall
     {
         public int RowCount { get; private set; }
 
-        public List<List<double>> Resolve(List<List<double>> adjacencyMatrix, bool isIncidentMatrix = false)
+        public List<List<double>> Resolve(List<List<double>> adjacencyMatrix, bool isIncidentMatrix)
         {
-            if (isIncidentMatrix)
-            {
-                // TODO: convert
-                throw new NotImplementedException("Only adjacency matrices are supported");
-            }
-
             Validate(adjacencyMatrix);
+
             RowCount = adjacencyMatrix.First().Count;
 
-            var weightMatrix = PrepareWeightMatrix(adjacencyMatrix.ToArray2D());
+            var weightMatrix = PrepareWeightMatrix(adjacencyMatrix);
 
             for (int k = 0; k < RowCount; k++)
             {
@@ -28,46 +23,46 @@ namespace GraphAlgorithm.Services.FloydWarshall
                 {
                     for (int j = 0; j < RowCount; j++)
                     {
-                        weightMatrix[i, j] = Min(weightMatrix[i, j], weightMatrix[i, k] + weightMatrix[k, j]);
+                        weightMatrix[i][j] = Min(weightMatrix[i][j], weightMatrix[i][k] + weightMatrix[k][j]);
                     }
                 }
             }
 
-            // TODO: should I return 0 or Infinity
             ReplaceInfinityWithZero(weightMatrix);
 
-            return weightMatrix.ToListOfLists();
+            return weightMatrix;
         }
 
-        private void ReplaceInfinityWithZero(double[,] matrix)
+        private void ReplaceInfinityWithZero(List<List<double>> matrix)
         {
             for (int i = 0; i < RowCount; i++)
             {
                 for (int j = 0; j < RowCount; j++)
                 {
-                    if (double.IsPositiveInfinity(matrix[i, j]))
+                    if (double.IsPositiveInfinity(matrix[i][j]))
                     {
-                        matrix[i, j] = 0;
+                        matrix[i][j] = 0;
                     }
                 }
             }
         }
 
-        private double[,] PrepareWeightMatrix(double[,] adjacencyMatrix)
+        private List<List<double>> PrepareWeightMatrix(List<List<double>> adjacencyMatrix)
         {
-            var algorithmMatrix = new double[RowCount, RowCount];
+            var algorithmMatrix = new List<List<double>>();
 
             for (int i = 0; i < RowCount; i++)
             {
+                algorithmMatrix.Add(new List<double>());
                 for (int j = 0; j < RowCount; j++)
                 {
-                    if (i == j || adjacencyMatrix[i, j] == 0)
+                    if (i != j && adjacencyMatrix[i][j] == 0)
                     {
-                        algorithmMatrix[i, j] = double.PositiveInfinity;
+                        algorithmMatrix[i].Add(double.PositiveInfinity);
                     }
                     else
                     {
-                        algorithmMatrix[i, j] = adjacencyMatrix[i, j];
+                        algorithmMatrix[i].Add(adjacencyMatrix[i][j]);
                     }
                 }
             }
