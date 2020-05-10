@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using GraphAlgorithm.Models;
 using GraphAlgorithm.Services;
+using Microsoft.Ajax.Utilities;
+using Newtonsoft.Json;
+using GraphAlgorithm.Services.FloydWarshall;
 
 namespace GraphAlgorithm.Controllers
 {
@@ -25,16 +28,13 @@ namespace GraphAlgorithm.Controllers
 
         public ActionResult IncindenceMatrix()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
-
-        public ActionResult KruskalAlgorithm(int[][] matrix)
+        [HttpGet]
+        public JsonResult KruskalAlgorithm(string data)
         {
-            var INF = double.PositiveInfinity;
-
+            List<List<double>> matrix = JsonConvert.DeserializeObject< List < List<double> >>(data);
             /* Let us create the following graph 
                 2   3 
             (0)--(1)--(2) 
@@ -43,54 +43,26 @@ namespace GraphAlgorithm.Controllers
             |  /     \ | 
             (3)-------(4) 
                   9         */
+            if (matrix == null) return null;
 
-            var adjacencyMatrix = new List<List<double>>
-            {
-                new List<double>
-                {
-                    INF, 2, INF, 6, INF
-                },
-                new List<double>
-                {
-                    2, INF, 3, 8, 5
-                },
-                new List<double>
-                {
-                    INF, 3, INF, INF, 7
-                },
-                new List<double>
-                {
-                    6, 8, INF, INF, 9
-                },
-                new List<double>
-                {
-                    INF, 5, 7, 9, INF
-                }
-            };
-
+            matrix = replaceZeroToInf(matrix);
             var kruskalAlgorithm = new KruskalAlgorithmService();
+            var resultMatrix = kruskalAlgorithm.Resolve(matrix, false);
+            resultMatrix = replaceInfToZero(resultMatrix);
 
-            var resultMatrix = kruskalAlgorithm.Resolve(adjacencyMatrix, false);
-            Console.WriteLine(kruskalAlgorithm.MinimalCost);
-
-            for (var i = 0; i < resultMatrix[0].Count; i++)
+            Object result = new
             {
-                Console.WriteLine();
+                matrix = resultMatrix,
+                minimalCost= kruskalAlgorithm.MinimalCost
+            }; 
 
-                for (var j = 0; j < resultMatrix[i].Count; j++)
-                {
-                    Console.Write(resultMatrix[i][j] + "       ");
-                }
-            }
-
-           
-            return View("Index");
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult PrimAlgorithm()
+        [HttpGet]
+        public ActionResult PrimAlgorithm(string data)
         {
-            var INF = double.PositiveInfinity;
-
+            List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
             /* Let us create the following graph 
                 2   3 
             (0)--(1)--(2) 
@@ -99,95 +71,79 @@ namespace GraphAlgorithm.Controllers
             |  /     \ | 
             (3)-------(4) 
                   9         */
+            if (matrix == null) return null;
 
-            var adjacencyMatrix = new List<List<double>>
+            matrix = replaceZeroToInf(matrix);
+            var primAlgorithm = new PrimAlgorithmService();
+            var resultMatrix = primAlgorithm.Resolve(matrix, false);
+            resultMatrix = replaceInfToZero(resultMatrix);
+
+            Object result = new
             {
-                new List<double>
-                {
-                    INF, 2, INF, 6, INF
-                },
-                new List<double>
-                {
-                    2, INF, 3, 8, 5
-                },
-                new List<double>
-                {
-                    INF, 3, INF, INF, 7
-                },
-                new List<double>
-                {
-                    6, 8, INF, INF, 9
-                },
-                new List<double>
-                {
-                    INF, 5, 7, 9, INF
-                }
+                matrix = resultMatrix,
+                minimalCost = primAlgorithm.MinimalCost
             };
 
-            var primAlgorithm = new PrimAlgorithmService();
-
-            var resultMatrix = primAlgorithm.Resolve(adjacencyMatrix, false);
-            Console.WriteLine(primAlgorithm.MinimalCost);
-
-            for (var i = 0; i < resultMatrix[0].Count; i++)
-            {
-                Console.WriteLine();
-
-                for (var j = 0; j < resultMatrix[i].Count; j++)
-                {
-                    Console.Write(resultMatrix[i][j] + "       ");
-                }
-            }
-
-            //some view or Json response
-            return View("Index");
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult HamiltonianCycleAlgorithm()
+        [HttpGet]
+        public ActionResult HamiltonianCycleAlgorithm(string data)
+        {
+            List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+
+            if (matrix == null) return null;
+
+            matrix = replaceZeroToInf(matrix);
+            var hamiltonianCycle = new HamiltonianCycleAlgirithmService();
+            var resultMatrix = hamiltonianCycle.Resolve(matrix, false);
+            resultMatrix = replaceInfToZero(resultMatrix);
+
+            Object result = new
+            {
+                matrix = resultMatrix,
+                path = hamiltonianCycle.Path
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult FloydWarshallSecondAlgorithm(string data)
+        {
+            List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+
+            if (matrix == null) return null;
+
+            matrix = replaceZeroToInf(matrix);
+            var method = new FloydWarshallSecondAlgorithm();
+            var resultMatrix = method.Resolve(matrix, false);
+            resultMatrix = replaceInfToZero(resultMatrix);
+
+            return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
+        }
+
+        private List<List<double>> replaceZeroToInf(List<List<double>> matrix)
         {
             var INF = double.PositiveInfinity;
 
-            var adjacencyMatrix = new List<List<double>>
-            {
-                new List<double>
-                {
-                    INF, 2, INF, 6, INF
-                },
-                new List<double>
-                {
-                    2, INF, 3, 8, 5
-                },
-                new List<double>
-                {
-                    INF, 3, INF, INF, 7
-                },
-                new List<double>
-                {
-                    6, 8, INF, INF, 9
-                },
-                new List<double>
-                {
-                    INF, 5, 7, 9, INF
-                }
-            };
+            for (int i = 0; i < matrix.Count; i++)
+                for (int j = 0; j < matrix.Count; j++)
+                    if (matrix[i][j] == 0)
+                        matrix[i][j] = INF;
 
-            var hamiltonianCycle = new HamiltonianCycleAlgirithmService();
+            return matrix;
+        }
 
-            var resultMatrix = hamiltonianCycle.Resolve(adjacencyMatrix, false);
+        private List<List<double>> replaceInfToZero(List<List<double>> matrix)
+        {
+            var INF = double.PositiveInfinity;
 
-            System.Diagnostics.Debug.WriteLine(hamiltonianCycle.Path);
+            for (int i = 0; i < matrix.Count; i++)
+                for (int j = 0; j < matrix.Count; j++)
+                    if (matrix[i][j] == INF)
+                        matrix[i][j] = 0;
 
-            for (var i = 0; i < resultMatrix.Count; i++)
-            {
-                System.Diagnostics.Debug.WriteLine("");
-
-                for (var j = 0; j < resultMatrix[i].Count; j++)
-                {
-                    System.Diagnostics.Debug.Write(resultMatrix[i][j] + "           ");
-                }
-            }
-
-            return View("Index");
+            return matrix;
         }
     }
 }

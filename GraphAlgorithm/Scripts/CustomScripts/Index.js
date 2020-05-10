@@ -287,3 +287,79 @@ function createDisorientedGraph() {
         .style('target-arrow-shape', 'none').update();
 }
 
+function toStr(matrix) {
+    var str = '';
+
+    for (var i = 0; i < matrix.length; i++) {
+        for (var j = 0; j < matrix[i].length; j++) {
+            str += matrix[i][j] + ', ';
+        }
+        str += '\n';
+    }
+
+    return str;
+}
+
+function dialogShowMatrix(text, matrix) {
+
+    var message = document.getElementById('message');
+    var str = toStr(matrix);
+
+    while (message.firstChild)
+        message.removeChild(message.firstChild);
+
+    var button = document.createElement('button');
+    button.type = "button";
+    button.className = "btn btn-primary";
+    button.textContent = "show matrix";
+    button.style = "float:right";
+    button.addEventListener('click', function () {
+        $('#dialogModalShowMatrix').modal();
+        document.getElementById('textMatrix').value = str;
+    })
+    message.textContent = text;
+    message.appendChild(button);
+}
+
+document.getElementById('kruskalAlgorithmId').addEventListener('click', function () {
+    var graphMatrix = getAdjacencyMatrix();
+    var matrix = JSON.stringify(graphMatrix);
+
+    if (graphMatrix.length > 0) {
+
+        $.get('/Home/KruskalAlgorithm', $.param({ data: matrix }, true), function (data) {
+
+            var message = "minimalCost: " + data.minimalCost; 
+            dialogShowMatrix(message, data.matrix);
+        });
+    }
+})
+
+document.getElementById('primAlgorithmId').addEventListener('click', function () {
+    var graphMatrix = getAdjacencyMatrix();
+    var matrix = JSON.stringify(graphMatrix);
+
+    if (graphMatrix.length > 0) {
+
+        $.get('/Home/PrimAlgorithm', $.param({ data: matrix }, true), function (data) {
+           
+            var message = "minimalCost: " + data.minimalCost;
+            dialogShowMatrix(message, data.matrix);
+        });
+    }
+})
+
+document.getElementById('hamiltonianCycleAlgorithmId').addEventListener('click', function () {
+    var graphMatrix = getAdjacencyMatrix();
+    var matrix = JSON.stringify(graphMatrix);
+
+    if (graphMatrix.length > 0) {
+
+        $.get('/Home/HamiltonianCycleAlgorithm', $.param({ data: matrix }, true), function (data) {
+
+            var message = "path: " + data.path;
+            dialogShowMatrix(message, data.matrix);
+        });
+    }
+})
+

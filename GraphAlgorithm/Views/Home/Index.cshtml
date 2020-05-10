@@ -58,11 +58,13 @@
         <li class="dropdown">
             <button class="btn btn-primary dropdown-toggle margin-right" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Алгоритм
+                Алгоритми
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                @Html.ActionLink("Алгоритм Крускала", "KruskalAlgorithm", "Home", new { @class = "dropdown-item" })
-            </div>
+                <label id="kruskalAlgorithmId" class="dropdown-item">Kruskal Algorithm</label>
+                <label id="primAlgorithmId" class="dropdown-item">Prim Algorithm</label>
+                <label id="hamiltonianCycleAlgorithmId" class="dropdown-item">HamiltonianCycleAlgorithm</label>
+            </div> 
         </li>
 
         <li type="button" class="btn btn-primary margin-right" id="deleteBtn">Видалити</li>
@@ -74,7 +76,7 @@
 </p>
 
 <section>
-    <div id="message" class="alert alert-success">
+    <div id="message" class="alert alert-success text-center" role="alert" style="height:auto;overflow:auto">
         Текст
     </div>
 </section>
@@ -116,6 +118,7 @@
         }
     }, false);
 </script>
+
 
 <script src="~/Scripts/CustomScripts/Index.js"></script>
 
@@ -217,6 +220,25 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
                 <button type="button" onclick="incidenceSaveChanges()" class="btn btn-primary" data-dismiss="modal">Зберегти</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogModalShowMatrix" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Матриця</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea id="textMatrix" class="form-control" style="min-width: 100%; min-height:200px"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
             </div>
         </div>
     </div>
