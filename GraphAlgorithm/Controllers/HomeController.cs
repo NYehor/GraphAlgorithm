@@ -113,11 +113,8 @@ namespace GraphAlgorithm.Controllers
             List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
 
             if (matrix == null) return null;
-
-            matrix = replaceZeroToInf(matrix);
             var method = new FloydWarshallSecondAlgorithm();
             var resultMatrix = method.Resolve(matrix, false);
-            resultMatrix = replaceInfToZero(resultMatrix);
 
             return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
         }
