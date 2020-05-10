@@ -6,7 +6,7 @@ namespace GraphAlgorithm.Services
     /// <summary>
     /// Prim's Algorithm returns List<List<double>> and main minimal value - property MinimalCost
     /// </summary>
-    public class PrimAlgorithmService : IMethod
+    public class PrimAlgorithmService
     {
         public int MinimalCost { get; set; }
 

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace GraphAlgorithm.Services
 {
-    public class HamiltonianCycleAlgirithmService : IMethod
+    public class HamiltonianCycleAlgirithmService
     {
         private const double INF = double.PositiveInfinity;
 

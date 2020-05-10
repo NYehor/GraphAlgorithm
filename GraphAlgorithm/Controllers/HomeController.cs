@@ -6,6 +6,7 @@ using GraphAlgorithm.Services;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using GraphAlgorithm.Services.FloydWarshall;
+using GraphAlgorithm.Services.SearchTree;
 
 namespace GraphAlgorithm.Controllers
 {
@@ -126,6 +127,28 @@ namespace GraphAlgorithm.Controllers
             if (matrix == null) return null;
             var method = new MaxMatches();
             var resultMatrix = method.Resolve(matrix, false);
+
+            return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult WideSearchTreeAlgorithm(string data, int start)
+        {
+            int[,] matrix = JsonConvert.DeserializeObject<int[,]>(data);
+
+            if (matrix == null) return null;
+            var method = new SearchTree();
+            var resultMatrix = method.StartWideSearch(matrix, start);
+
+            return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DeepSearchTreeAlgorithm(string data, int start)
+        {
+            int[,] matrix = JsonConvert.DeserializeObject<int[,]>(data);
+
+            if (matrix == null) return null;
+            var method = new SearchTree();
+            var resultMatrix = method.StartDeepSearch(matrix, start);
 
             return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
         }

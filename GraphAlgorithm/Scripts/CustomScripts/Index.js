@@ -50,11 +50,21 @@ window.onload = function () {
     $("#defaultBtn").on('click', function (eventObject) {
 
         supplayFunc("defaultBtn");
+
+        var message = document.getElementById('message');
+        while (message.firstChild)
+            message.removeChild(message.firstChild);
+        message.textContent = "Виділіть і переміщуйте об'єкти.";
     });
 
     $("#deleteBtn").on('click', function (eventObject) {
 
         supplayFunc("deleteBtn");
+
+        var message = document.getElementById('message');
+        while (message.firstChild)
+            message.removeChild(message.firstChild);
+        message.textContent = "Клацніть по об'єкту, який хочете видалити";
 
         cy.on('tap', function (evt) {
             var node = evt.target;
@@ -68,7 +78,7 @@ window.onload = function () {
     $("#addBtn").on('click', function (eventObject) {
 
         supplayFunc("addBtn");
-
+        message.textContent = "Натисніть на робочу область, щоб додати вершину.";
         cy.on('tap', function (evt) {
             amountOfNode++;
             cy.add({
@@ -81,6 +91,10 @@ window.onload = function () {
     $("#connectBtn").on('click', function (eventObject) {
 
         supplayFunc("connectBtn");
+        var message = document.getElementById('message');
+        while (message.firstChild)
+            message.removeChild(message.firstChild);
+        message.textContent = "Виділіть першу вершину для створення дуги";
 
         cy.on('tap', 'node', function (evt) {
             $('#connectDialog').modal();
@@ -300,6 +314,30 @@ function toStr(matrix) {
     return str;
 }
 
+function chooseNode(func) {
+
+    $("#defaultBtn").click();
+
+    var message = document.getElementById('message');
+    while (message.firstChild)
+        message.removeChild(message.firstChild);
+
+    message.textContent = "Виберіть вершину.";
+
+    cy.on('tap', function (evt) {
+        var node = evt.target;
+        var dict = {};
+        var length = cy.nodes().length;
+        for (var i = 0; i < length; i++) {
+            dict[cy.nodes()[i].data('id')] = i;
+        }
+        var id = node.data('id');
+        func(dict[id]);
+        console.log(id);
+        cy.removeListener('tap');
+    });
+}
+
 function dialogShowMatrix(text, matrix) {
 
     var str = toStr(matrix);
@@ -395,14 +433,58 @@ document.getElementById('dijkstraAlgorithmId').addEventListener('click', functio
 
     if (graphMatrix.length > 0) {
 
-        $.get('/Home/DijkstraAlgorithm', $.param({ data: matrix, start: 1 }, true), function (data) {
+        var func = function (id) {
+            id++;
+            $.get('/Home/DijkstraAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
+                var message = document.getElementById('message');
+                while (message.firstChild)
+                    message.removeChild(message.firstChild);
 
-            var message = document.getElementById('message');
-            while (message.firstChild)
-                message.removeChild(message.firstChild);
+                message.textContent = data;
+            });
+        }
 
-            message.textContent = data;
-        });
+        chooseNode(func);
+    }
+})
+
+document.getElementById('wideSearchTreeAlgorithmId').addEventListener('click', function () {
+    var graphMatrix = getAdjacencyMatrix();
+    var matrix = JSON.stringify(graphMatrix);
+
+    if (graphMatrix.length > 0) {
+
+        var func = function (id) {
+            $.get('/Home/WideSearchTreeAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
+                var message = document.getElementById('message');
+                while (message.firstChild)
+                    message.removeChild(message.firstChild);
+
+                message.textContent = data;
+            });
+        }
+
+        chooseNode(func);
+    }
+})
+
+document.getElementById('deepSearchTreeAlgorithmId').addEventListener('click', function () {
+    var graphMatrix = getAdjacencyMatrix();
+    var matrix = JSON.stringify(graphMatrix);
+
+    if (graphMatrix.length > 0) {
+
+        var func = function (id) {
+            $.get('/Home/DeepSearchTreeAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
+                var message = document.getElementById('message');
+                while (message.firstChild)
+                    message.removeChild(message.firstChild);
+
+                message.textContent = data;
+            });
+        }
+
+        chooseNode(func);
     }
 })
 

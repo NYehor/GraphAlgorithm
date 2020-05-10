@@ -5,7 +5,7 @@ using static System.Math;
 
 namespace GraphAlgorithm.Services.FloydWarshall
 {
-    public class FloydWarshallSecondAlgorithm : IMethod
+    public class FloydWarshallSecondAlgorithm
     {
         public int RowCount { get; private set; }
 

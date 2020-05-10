@@ -92,7 +92,6 @@ function adjacencyToIncidence(matrix) {
 
     var edge = 0;
     var cols = matrix.length;
-    var rows = matrix.length;
 
     for (var col = 0; col < cols; col++) {
         for (var row = 0; row < col; row++) {

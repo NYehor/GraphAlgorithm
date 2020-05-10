@@ -6,7 +6,7 @@ namespace GraphAlgorithm.Services
     /// <summary>
     /// Kruskal Algorithm returns List<List<double>> and main minimal value - property MinimalCost
     /// </summary>
-    public class KruskalAlgorithmService : IMethod
+    public class KruskalAlgorithmService
     {
         public int MinimalCost { get; set; }
 
