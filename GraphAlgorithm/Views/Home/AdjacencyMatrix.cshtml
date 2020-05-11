@@ -72,6 +72,17 @@
         CopyMatrixToTextInput();
     }
 
+    function Submit() {      
+        if (document.getElementById("commoSep").checked) {
+            document.getElementById('separatorID').value = ',';
+        }
+        else {
+            document.getElementById('separatorID').value = ' ';
+        }
+
+        document.getElementById('isAdjacency').value = "adjacency";
+        $('#AdjacencyMatrixForm').submit();
+    }
 </script>
 
 <p>
@@ -80,11 +91,11 @@
 <ul class="nav nav-pills" id="pills-tab" role="tablist">
     <li class="nav-item">
         <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab"
-           aria-controls="pills-home" aria-selected="true">Ввести в таблицу</a>
+           aria-controls="pills-home" aria-selected="true">Ввести в таблицю</a>
     </li>
     <li>
         <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab"
-           aria-controls="pills-profile" aria-selected="false">Ввести как текст</a>
+           aria-controls="pills-profile" aria-selected="false">Ввести як текст</a>
     </li>
 </ul>
 
@@ -115,7 +126,7 @@
             </p>
             <button class="btn-dark" onclick="IncSize()" value="add" name="add">
                 <span class="glyphicon glyphicon-plus"></span>
-                Добавить вершину в матрицу
+                Додати вершину до матриці
             </button>
             <p>
 
@@ -123,14 +134,17 @@
         </div>
     </div>
     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-        <form>
-            <textarea id="AdjacencyMatrixFieldPage" rows="10" cols="30">
+        <form id="AdjacencyMatrixForm" method="post" action="@Url.Action("SetMatrix")">
+            <input name="TypeOfMatrix" id="isAdjacency" type="text" value = "adjacency" style="display:none" />
+            <input name="Separator" id="separatorID" type="text" value = "adjacency" style="display:none" />
+            <textarea name="Matrix" id="AdjacencyMatrixFieldPage" rows="10" cols="30">
 0, 0, 0
 0, 0, 0
-0, 0, 0</textarea>
+0, 0, 0
+</textarea>
             <div id="idSeparatorList">
-                Разделитель: <input type="radio" name="separator" value="commo" id="commoSep" checked><label for="commoSep">запятая</label>
-                <input type="radio" name="separator" value="space" id="spaceSep"> <label for="spaceSep">пробел</label>
+                Розділовий знак: <input type="radio" name="separator" value="commo" id="commoSep" checked><label for="commoSep">кома</label>
+                <input type="radio" name="separator" value="space" id="spaceSep"> <label for="spaceSep">пробіл</label>
             </div>
         </form>
         <p>
@@ -138,3 +152,9 @@
         </p>
     </div>
 </div>
+
+<button class="btn-primary" onclick="Submit()"> Побудувати граф </button>
+
+<p>
+
+</p>

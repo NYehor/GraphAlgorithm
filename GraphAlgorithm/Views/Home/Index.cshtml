@@ -1,48 +1,80 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@model GraphAlgorithm.Models.IndexViewModel
+
+@{
+    ViewBag.Title = "Головна сотрінка";
 }
 
 @Scripts.Render("~/bundles/Scripts")
-<link rel="stylesheet" href="~/Content/Home.css">
 
+<link rel="stylesheet" href="~/Content/Home.css">
 <p>
 
 </p>
-
 <section>
     <ul class="nav nav-pills">
         <li class="dropdown">
             <button class="btn btn-primary dropdown-toggle margin-right" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Graph
+                Граф
             </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Create</a>
-                <a class="dropdown-item" href="#">Open </a>
-                <a class="dropdown-item" href="#">Save </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Adjacency Matrix </a>
-                <a class="dropdown-item" href="#">Incidence Matrix </a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Delete </a>
-            </div>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                <li class="dropdown-item" style="width:inherit">
+                    <label data-toggle="modal" onclick="createOrientedGraph()" style="width:inherit">Створити орієнтований граф</label>
+                </li>
+                <li class="dropdown-item" style="width:inherit">
+                    <label data-toggle="modal" onclick="createDisorientedGraph()" style="width:inherit">Створити неорієнтований граф</label>
+                </li>
+                <li class="dropdown-divider"></li>
+
+                <li id="tmpLi" class="dropdown-item">
+                    <label for="openFileBtn" style="width:inherit" accept=".txt">Відкрити</label>
+                    <input id="openFileBtn" onclick="this.value=null;" style="display:none;" type="file">
+                </li>
+
+                <li class="dropdown-item">
+                    <label data-toggle="modal" data-target="#saveDialog" style="width:inherit">Зберегти</label>
+                </li>
+                <li class="dropdown-divider"></li>
+                <li class="dropdown-item">
+                    <label onclick="showAdjacency()" style="width:inherit">Матриця суміжності</label>
+                </li>
+                <li class="dropdown-item">
+
+                    <label onclick="showIncidence()" style="width:inherit">Матриця інцидентності</label>
+
+                </li>
+                <li class="dropdown-divider"></li>
+                <li class="dropdown-item">
+                    <label onclick="removeElement()" style="width:inherit">Видалити</label>
+                </li>
+            </ul>
         </li>
+        <li type="button" class="btn btn-secondary margin-right" id="defaultBtn">За замовчуванням</li>
+        <li type="button" class="btn btn-primary margin-right" id="addBtn">Додати</li>
 
-        <li type="button" class="btn btn-secondary margin-right" id="addBtn">Add</li>
-
-        <li type="button" class="btn btn-primary margin-right" id="connectBtn">Connect</li>
+        <li type="button" class="btn btn-primary margin-right" id="connectBtn">З'єднати</li>
 
         <li class="dropdown">
             <button class="btn btn-primary dropdown-toggle margin-right" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Algorithm
+                Алгоритми
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
+                <label id="kruskalAlgorithmId" class="dropdown-item">Kruskal Algorithm</label>
+                <label id="primAlgorithmId" class="dropdown-item">Prim Algorithm</label>
+                <div class="dropdown-divider"></div>
+                <label id="hamiltonianCycleAlgorithmId" class="dropdown-item">HamiltonianCycleAlgorithm</label>
+                <label id="dijkstraAlgorithmId" class="dropdown-item">DijkstraAlgorithm</label>
+                <label id="floydWarshallSecondAlgorithmId" class="dropdown-item">FloydWarshallSecondAlgorithm</label>
+                <label id="maxMatchesAlgorithmId" class="dropdown-item">MaxMatches</label>
+                <div class="dropdown-divider"></div>
+                <label id="wideSearchTreeAlgorithmId" class="dropdown-item">WideSearchTreeAlgorithm</label>
+                <label id="deepSearchTreeAlgorithmId" class="dropdown-item">DeepSearchTreeAlgorithm</label>
             </div>
         </li>
 
-        <li type="button" class="btn btn-primary margin-right" id="deleteBtn">Delete</li>
+        <li type="button" class="btn btn-primary margin-right" id="deleteBtn">Видалити</li>
 
     </ul>
 </section>
@@ -51,14 +83,12 @@
 </p>
 
 <section>
-    <div id="message" class="alert alert-success">
-        Text
+    <div id="message" class="alert alert-success text-center" role="alert" style="height:auto;overflow:auto">
+        Виділіть і переміщуйте об'єкти.
     </div>
 </section>
 
 <div id="cy"></div>
-
-<script src="~/Scripts/CustomScripts/Index.js"></script>
 
 <script>
     function findDimensions() {
@@ -73,8 +103,45 @@
     else if (window.attachEvent)
         window.attachEvent("onload", findDimensions);
     window.onresize = findDimensions;
+
+    document.getElementById("openFileBtn").addEventListener("change", function () {
+        var file = this.files[0];
+        var result = '';
+        if (file) {
+            var reader = new FileReader();
+
+            reader.onload = function (evt) {
+                result = evt.target.result;
+
+                var matrix = parseTextInput(result, ',');
+                loadNewGraph(matrix, true)
+            };
+
+            reader.onerror = function (evt) {
+                console.error("An error ocurred reading the file", evt);
+            };
+
+            reader.readAsText(file, "UTF-8");
+        }
+    }, false);
 </script>
 
+
+<script src="~/Scripts/CustomScripts/Index.js"></script>
+
+<script>
+    var strMatrix = @Html.Raw(Json.Encode(Model.Matrix));
+    var type = @Html.Raw(Json.Encode(Model.TypeOfMatrix));
+    var separator = @Html.Raw(Json.Encode(Model.Separator));
+
+    if (strMatrix != '' && separator != null) {
+        var matrix = parseTextInput(strMatrix, separator);
+        if (type == "adjacency")
+            loadNewGraph(matrix, true);
+        else
+            loadNewGraph(matrix, false);
+    }    
+</script>
 <p>
 
 </p>
@@ -83,8 +150,8 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Создать ребро</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title" id="exampleModalLongTitle">Створити ребро</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -93,14 +160,92 @@
                 <b> -> </b>
                 <input id="secondSelected" list="browsers">
 
-                <datalist id="browsers"> 
+                <datalist id="browsers">
                 </datalist>
             </div>
             <div class="modal-body text-center">
-                Вес: <input id="valueOfEdge">
+                Вага: <input id="valueOfEdge" value="0">
             </div>
-            <div class="modal-footer text-md-center">      
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdges()">Создать</button>
+            <div class="modal-footer text-md-center">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdges()">Створити</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="saveDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Створити файл</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                Ім'я:  <input type="text" id="fileName">
+                <button type="button" class="btn btn-primary" onclick="download()" data-dismiss="modal">Створити</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="showAdjacencyMatrix" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Матриця суміжності</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Задайте матрицю суміжності. Використовуйте кому "," в якості розділового знаку</p>
+                <textarea id="textAdjacencyMatrix" class="form-control" style="min-width: 100%; min-height:200px"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                <button type="button" onclick="adjacencySaveChanges()" class="btn btn-primary" data-dismiss="modal">Зберегти</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="showIncidenceMatrix" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Матриця інцидентності</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Задайте матрицю інцидентності. Використовуйте кому "," в якості розділового знаку</p>
+                <textarea id="textIncidenceMatrix" class="form-control" style="min-width: 100%; min-height:200px"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+                <button type="button" onclick="incidenceSaveChanges()" class="btn btn-primary" data-dismiss="modal">Зберегти</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dialogModalShowMatrix" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Матриця</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea id="textMatrix" class="form-control" style="min-width: 100%; min-height:200px"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
             </div>
         </div>
     </div>

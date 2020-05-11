@@ -18,15 +18,13 @@
             </button>
             <div class="collapse navbar-collapse" id="layoutNavbarSupportedContent">
                 <ul class="navbar-nav mr-auto ">
-                    <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", new { @class = "nav-link" })</li>
+                    <li class="nav-item">@Html.ActionLink("Головна сторінка", "Index", "Home", new { @class = "nav-link" })</li>
                     <li class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Graph</a>
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Граф</a>
                         <div class="dropdown-menu">
-                            @Html.ActionLink("Matrix", "Matrix", "Home", new { @class = "dropdown-item" })
-                            @Html.ActionLink("IncindenceMatrix", "IncindenceMatrix", "Home", new { @class = "dropdown-item" })
-                            @Html.ActionLink("Kruskal's Algorithm", "KruskalAlgorithm", "Home", new { @class = "dropdown-item" })
-                            @Html.ActionLink("Prim's Algorithm", "PrimAlgorithm", "Home", new { @class = "dropdown-item" })
-                            @Html.ActionLink("Hamiltonian cycle", "HamiltonianCycleAlgorithm", "Home", new { @class = "dropdown-item" })
+                            @Html.ActionLink("Матриця суміжності", "AdjacencyMatrix", "Home", new { @class = "dropdown-item" })
+                            @Html.ActionLink("Матриця інцидентності", "IncindenceMatrix", "Home", new { @class = "dropdown-item" })
+
                         </div>
                     </li>
                 </ul>

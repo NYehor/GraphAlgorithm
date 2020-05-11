@@ -59,11 +59,7 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -127,11 +123,17 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\IndexViewModel.cs" />
+    <Compile Include="Services\DijkstraAlgorithm\Dijkstra.cs" />
+    <Compile Include="Services\DijkstraAlgorithm\Graph.cs" />
+    <Compile Include="Services\FloydWarshall\FloydWarshallSecondAlgorithm.cs" />
     <Compile Include="Services\HamiltonianCycleAlgirithmService.cs" />
-    <Compile Include="Services\IMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\MaxMatches.cs" />
     <Compile Include="Services\PrimAlgorithmService.cs" />
     <Compile Include="Services\KruskalAlgorithmService.cs" />
+    <Compile Include="Services\SearchTree\Node.cs" />
+    <Compile Include="Services\SearchTree\SearchTree .cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-grid.css" />
@@ -265,7 +267,7 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\Matrix.cshtml" />
+    <Content Include="Views\Home\AdjacencyMatrix.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
@@ -281,7 +283,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
