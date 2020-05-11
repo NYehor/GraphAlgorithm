@@ -359,7 +359,7 @@ function dialogShowMatrix(text, matrix) {
     var button = document.createElement('button');
     button.type = "button";
     button.className = "btn btn-primary";
-    button.textContent = "Показати матрицю";
+    button.textContent = "Показать матрицу";
     button.style = "float:right";
     button.addEventListener('click', function () {
         $('#dialogModalShowMatrix').modal();
@@ -378,7 +378,7 @@ document.getElementById('kruskalAlgorithmId').addEventListener('click', function
         $.get('/Home/KruskalAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                var message = "Мінімальна вага: " + data.minimalCost;
+                var message = "Мінімальна ціна: " + data.minimalCost;
                 dialogShowMatrix(message, data.matrix);
             }
             else
@@ -396,7 +396,7 @@ document.getElementById('primAlgorithmId').addEventListener('click', function ()
         $.get('/Home/PrimAlgorithm', $.param({ data: matrix }, true), function (data) {
            
             if (data.exception == "") {
-                var message = "Мінімальна вага: " + data.minimalCost;
+                var message = "Мінімальна ціна: " + data.minimalCost;
                 dialogShowMatrix(message, data.matrix);
             }
             else
