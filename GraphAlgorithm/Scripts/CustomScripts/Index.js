@@ -326,6 +326,9 @@ function chooseNode(func) {
 
     cy.on('tap', function (evt) {
         var node = evt.target;
+
+        if (node == cy) return;
+
         var dict = {};
         var length = cy.nodes().length;
         for (var i = 0; i < length; i++) {
@@ -336,6 +339,13 @@ function chooseNode(func) {
         console.log(id);
         cy.removeListener('tap');
     });
+}
+
+function showMessage(text) {
+    var message = document.getElementById('message');
+    while (message.firstChild)
+        message.removeChild(message.firstChild);
+    message.textContent = text;
 }
 
 function dialogShowMatrix(text, matrix) {
@@ -349,7 +359,7 @@ function dialogShowMatrix(text, matrix) {
     var button = document.createElement('button');
     button.type = "button";
     button.className = "btn btn-primary";
-    button.textContent = "show matrix";
+    button.textContent = "Показать матрицу";
     button.style = "float:right";
     button.addEventListener('click', function () {
         $('#dialogModalShowMatrix').modal();
@@ -367,8 +377,12 @@ document.getElementById('kruskalAlgorithmId').addEventListener('click', function
 
         $.get('/Home/KruskalAlgorithm', $.param({ data: matrix }, true), function (data) {
 
-            var message = "minimalCost: " + data.minimalCost; 
-            dialogShowMatrix(message, data.matrix);
+            if (data.exception == "") {
+                var message = "Мінімальна ціна: " + data.minimalCost;
+                dialogShowMatrix(message, data.matrix);
+            }
+            else
+                showMessage(data.exception);
         });
     }
 })
@@ -381,8 +395,12 @@ document.getElementById('primAlgorithmId').addEventListener('click', function ()
 
         $.get('/Home/PrimAlgorithm', $.param({ data: matrix }, true), function (data) {
            
-            var message = "minimalCost: " + data.minimalCost;
-            dialogShowMatrix(message, data.matrix);
+            if (data.exception == "") {
+                var message = "Мінімальна ціна: " + data.minimalCost;
+                dialogShowMatrix(message, data.matrix);
+            }
+            else
+                showMessage(data.exception);
         });
     }
 })
@@ -395,8 +413,19 @@ document.getElementById('hamiltonianCycleAlgorithmId').addEventListener('click',
 
         $.get('/Home/HamiltonianCycleAlgorithm', $.param({ data: matrix }, true), function (data) {
 
-            var message = "path: " + data.path;
+            var message = "Гамільтонів цикл: " + data.path;
             dialogShowMatrix(message, data.matrix);
+
+            if (data.exception == "") {
+                var message = "Гамільтонів цикл: " + data.path;
+
+                for (var i = 0; i < data.path.length; i++)
+                    message += cy.nodes()[data.path[i]].data('id') + '->';
+                
+                dialogShowMatrix(message, data.matrix);
+            }
+            else
+                showMessage(data.exception);
         });
     }
 })
@@ -409,7 +438,11 @@ document.getElementById('floydWarshallSecondAlgorithmId').addEventListener('clic
 
         $.get('/Home/FloydWarshallSecondAlgorithm', $.param({ data: matrix }, true), function (data) {
 
-            dialogShowMatrix("", JSON.parse(data));
+            if (data.exception == "") {
+                dialogShowMatrix("", data.matrix);
+            }
+            else
+                showMessage(data.exception);
         });
     }
 })
@@ -422,7 +455,11 @@ document.getElementById('maxMatchesAlgorithmId').addEventListener('click', funct
 
         $.get('/Home/MaxMatchesAlgorithm', $.param({ data: matrix }, true), function (data) {
 
-            dialogShowMatrix("", JSON.parse(data));
+            if (data.exception == "") {
+                dialogShowMatrix("", JSON.parse(data.matrix));
+            }
+            else
+                showMessage(data.exception);
         });
     }
 })
@@ -436,11 +473,27 @@ document.getElementById('dijkstraAlgorithmId').addEventListener('click', functio
         var func = function (id) {
             id++;
             $.get('/Home/DijkstraAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
-                var message = document.getElementById('message');
-                while (message.firstChild)
-                    message.removeChild(message.firstChild);
 
-                message.textContent = data;
+                if (data.exception == "") {
+
+                    var str='';
+                    for (var i = 0; i < data.matrix.length; i++) {
+                        var path = data.matrix[i].Path;
+                        var stringPath = '[ ';
+                        for (var j = 0; j < path.length; j++)
+                        {
+                            stringPath += path[j];
+                            stringPath += j < path.length - 1 ? ", " : " ]";
+                        }
+                        var index = data.matrix[i].VerticeNumber;
+                        var vertex = cy.nodes()[index - 1].data('id');
+                        str += "Вершина: " + vertex + " - Длина: " + data.matrix[i].PathLength + "- Путь: " +stringPath;
+                    }
+                  
+                    showMessage(str);
+                }
+                else
+                    showMessage(data.exception);
             });
         }
 
@@ -456,11 +509,12 @@ document.getElementById('wideSearchTreeAlgorithmId').addEventListener('click', f
 
         var func = function (id) {
             $.get('/Home/WideSearchTreeAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
-                var message = document.getElementById('message');
-                while (message.firstChild)
-                    message.removeChild(message.firstChild);
 
-                message.textContent = data;
+                if (data.exception == "") {
+                    showMessage(data.matrix);
+                }
+                else
+                    showMessage(data.exception);
             });
         }
 
@@ -476,11 +530,11 @@ document.getElementById('deepSearchTreeAlgorithmId').addEventListener('click', f
 
         var func = function (id) {
             $.get('/Home/DeepSearchTreeAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
-                var message = document.getElementById('message');
-                while (message.firstChild)
-                    message.removeChild(message.firstChild);
-
-                message.textContent = data;
+                if (data.exception == "") {
+                    showMessage(data.matrix);
+                }
+                else
+                    showMessage(data.exception);
             });
         }
 

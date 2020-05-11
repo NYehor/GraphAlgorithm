@@ -22,6 +22,11 @@ namespace GraphAlgorithm.Controllers
                 return View("Index", new IndexViewModel());
         }
 
+        public ActionResult Wiki()
+        {
+            return View();
+        }
+
         public ActionResult AdjacencyMatrix()
         {
             return View();
@@ -36,27 +41,31 @@ namespace GraphAlgorithm.Controllers
         public JsonResult KruskalAlgorithm(string data)
         {
             List<List<double>> matrix = JsonConvert.DeserializeObject< List < List<double> >>(data);
-            /* Let us create the following graph 
-                2   3 
-            (0)--(1)--(2) 
-            |    / \   | 
-           6|  8/   \5 |7 
-            |  /     \ | 
-            (3)-------(4) 
-                  9         */
-            if (matrix == null) return null;
 
-            matrix = replaceZeroToInf(matrix);
-            var kruskalAlgorithm = new KruskalAlgorithmService();
-            var resultMatrix = kruskalAlgorithm.Resolve(matrix, false);
-            resultMatrix = replaceInfToZero(resultMatrix);
-
-            Object result = new
+            Object result;
+            try
             {
-                matrix = resultMatrix,
-                minimalCost= kruskalAlgorithm.MinimalCost
-            }; 
+                if (matrix == null)
+                    throw new MethodException("TEST EXSEPTION");
+                matrix = replaceZeroToInf(matrix);
+                var kruskalAlgorithm = new KruskalAlgorithmService();
+                var resultMatrix = kruskalAlgorithm.Resolve(matrix, false);
+                resultMatrix = replaceInfToZero(resultMatrix);
 
+                result = new
+                {
+                    exception = "",
+                    matrix = resultMatrix,
+                    minimalCost = kruskalAlgorithm.MinimalCost
+                };
+            }
+            catch (MethodException ex) {
+                result = new
+                {
+                    exception = ex.Message
+                };
+            }
+       
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -64,26 +73,31 @@ namespace GraphAlgorithm.Controllers
         public ActionResult PrimAlgorithm(string data)
         {
             List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
-            /* Let us create the following graph 
-                2   3 
-            (0)--(1)--(2) 
-            |    / \   | 
-           6|  8/   \5 |7 
-            |  /     \ | 
-            (3)-------(4) 
-                  9         */
-            if (matrix == null) return null;
 
-            matrix = replaceZeroToInf(matrix);
-            var primAlgorithm = new PrimAlgorithmService();
-            var resultMatrix = primAlgorithm.Resolve(matrix, false);
-            resultMatrix = replaceInfToZero(resultMatrix);
-
-            Object result = new
+            Object result;
+            try
             {
-                matrix = resultMatrix,
-                minimalCost = primAlgorithm.MinimalCost
-            };
+                if (matrix == null)
+                    throw new MethodException("TEST EXSEPTION");
+
+                matrix = replaceZeroToInf(matrix);
+                var primAlgorithm = new PrimAlgorithmService();
+                var resultMatrix = primAlgorithm.Resolve(matrix, false);
+                resultMatrix = replaceInfToZero(resultMatrix);
+                result = new
+                {
+                    exception = "",
+                    matrix = resultMatrix,
+                    minimalCost = primAlgorithm.MinimalCost
+                };
+            }
+            catch (MethodException ex)
+            {
+                result = new
+                {
+                    exception = ex.Message
+                };
+            }
 
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -92,20 +106,31 @@ namespace GraphAlgorithm.Controllers
         public ActionResult HamiltonianCycleAlgorithm(string data)
         {
             List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+            Object result;
 
-            if (matrix == null) return null;
-
-            matrix = replaceZeroToInf(matrix);
-            var hamiltonianCycle = new HamiltonianCycleAlgirithmService();
-            var resultMatrix = hamiltonianCycle.Resolve(matrix, false);
-            resultMatrix = replaceInfToZero(resultMatrix);
-
-            Object result = new
+            try
             {
-                matrix = resultMatrix,
-                path = hamiltonianCycle.Path
-            };
+                if (matrix == null)
+                    throw new MethodException("TEST EXSEPTION");
 
+                matrix = replaceZeroToInf(matrix);
+                var hamiltonianCycle = new HamiltonianCycleAlgirithmService();
+                var resultMatrix = hamiltonianCycle.Resolve(matrix, false);
+                resultMatrix = replaceInfToZero(resultMatrix);
+                result = new
+                {
+                    matrix = resultMatrix,
+                    path = hamiltonianCycle.Path
+                };
+            }
+            catch (MethodException ex)
+            {
+                result = new
+                {
+                    exception = ex.Message
+                };
+            }
+            
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
@@ -113,57 +138,142 @@ namespace GraphAlgorithm.Controllers
         {
             List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
 
-            if (matrix == null) return null;
-            var method = new FloydWarshallSecondAlgorithm();
-            var resultMatrix = method.Resolve(matrix, false);
+            Object result;
+            try
+            {
+                if (matrix == null)
+                    throw new MethodException("TEST EXSEPTION");
 
-            return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
+                var method = new FloydWarshallSecondAlgorithm();
+                var resultMatrix = method.Resolve(matrix, false);
+                result = new
+                {
+                    exception = "",
+                    matrix = resultMatrix
+                };
+            }
+            catch (MethodException ex)
+            {
+                result = new
+                {
+                    exception = ex.Message
+                };
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult MaxMatchesAlgorithm(string data)
         {
             List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+            Object result;
+            try
+            {
+                if (matrix == null)
+                    throw new MethodException("TEST EXSEPTION");
 
-            if (matrix == null) return null;
-            var method = new MaxMatches();
-            var resultMatrix = method.Resolve(matrix, false);
+                var method = new MaxMatches();
+                var resultMatrix = method.Resolve(matrix, false);
 
-            return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
+                result = new
+                {
+                    exception="",
+                    matrix = resultMatrix
+                };
+            }
+            catch (MethodException ex)
+            {
+                result = new
+                {
+                    exception = ex.Message
+                };
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult WideSearchTreeAlgorithm(string data, int start)
         {
             int[,] matrix = JsonConvert.DeserializeObject<int[,]>(data);
+            Object result;
+            try
+            {
+                if (matrix == null)
+                    throw new MethodException("TEST EXSEPTION");
+                var method = new SearchTree();
+                var resultMatrix = method.StartWideSearch(matrix, start);
 
-            if (matrix == null) return null;
-            var method = new SearchTree();
-            var resultMatrix = method.StartWideSearch(matrix, start);
+                result = new
+                {
+                    exception = "",
+                    matrix = resultMatrix
+                };
+            }
+            catch (MethodException ex)
+            {
+                result = new
+                {
+                    exception = ex.Message
+                };
+            }
 
-            return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult DeepSearchTreeAlgorithm(string data, int start)
         {
             int[,] matrix = JsonConvert.DeserializeObject<int[,]>(data);
+            Object result;
+            try
+            {
+                if (matrix == null) return null;
+                var method = new SearchTree();
+                var resultMatrix = method.StartDeepSearch(matrix, start);
+                result = new
+                {
+                    exception = "",
+                    matrix = resultMatrix
+                };
+            }
+            catch (MethodException ex)
+            {
+                result = new
+                {
+                    exception = ex.Message
+                };
+            }
 
-            if (matrix == null) return null;
-            var method = new SearchTree();
-            var resultMatrix = method.StartDeepSearch(matrix, start);
-
-            return Json(JsonConvert.SerializeObject(resultMatrix), JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult DijkstraAlgorithm(string data, int start)
         {
             List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
 
-            if (matrix == null) return null;
+            Object result;
+            try
+            {
+                if (matrix == null)
+                    throw new MethodException("TEST EXSEPTION");
 
-            matrix = replaceZeroToInf(matrix);
-            var method = new Dijkstra(matrix);
-            var resultMatrix = method.Resolve(start);  
+                matrix = replaceZeroToInf(matrix);
+                var method = new Dijkstra(matrix);
+                var resultMatrix = method.Resolve(start);
+                result = new
+                {
+                    exception = "",
+                    matrix = resultMatrix
+                };
+            }
+            catch (MethodException ex)
+            {
+                result = new
+                {
+                    exception = ex.Message
+                };
+            }
 
-            return Json(resultMatrix, JsonRequestBehavior.AllowGet);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
 
         private List<List<double>> replaceZeroToInf(List<List<double>> matrix)

@@ -25,7 +25,7 @@ namespace GraphAlgorithm.Services
         {
             if (!ValidateMatrix(matrix))
             {
-                throw new Exception("Matrix is not valid.");
+                throw new MethodException("Matrix is not valid.");
             }
 
             int leftPart = matrix.Count;
