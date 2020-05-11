@@ -18,7 +18,7 @@ namespace GraphAlgorithm.Services
             graph = new Graph(AdjacencyMatrix);
         }
 
-        public string Resolve(int startVertice)
+        public object Resolve(int startVertice)
         {
             var currentVertice = graph.Vertices[startVertice - 1];
             double currentPathLength = 0;
@@ -65,7 +65,7 @@ namespace GraphAlgorithm.Services
             }
 
             
-            return strResult;
+            return result;
         }
 
         private double getTransitionWeight(Vertice from, Vertice to)
