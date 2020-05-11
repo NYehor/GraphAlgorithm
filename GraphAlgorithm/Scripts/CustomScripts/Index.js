@@ -409,14 +409,11 @@ document.getElementById('hamiltonianCycleAlgorithmId').addEventListener('click',
 
         $.get('/Home/HamiltonianCycleAlgorithm', $.param({ data: matrix }, true), function (data) {
 
-            var message = "Гамільтонів цикл: " + data.path;
-            dialogShowMatrix(message, data.matrix);
-
             if (data.exception == "") {
-                var message = "Гамільтонів цикл: " + data.path;
-
+                var message = "Гамільтонів цикл: ";
                 for (var i = 0; i < data.path.length; i++)
                     message += cy.nodes()[data.path[i]].data('id') + '->';
+                message += cy.nodes()[data.path[0]].data('id');
 
                 dialogShowMatrix(message, data.matrix);
             }

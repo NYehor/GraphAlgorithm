@@ -11,25 +11,37 @@ namespace GraphAlgorithm.Services
         private List<bool> _isVisitedVertexes;
         private List<int> _path;
         List<List<double>> _adjacencyMatrix;
+        private string _failureReason;
 
-        public string Path => _path != null && _path.Count > 0
-            ? string.Join(" -> ", _path) + " -> " + _path[0]
-            : string.Empty;
+        public int[] Path
+        {
+            get
+            {
+                return _path.ToArray();
+            }
+        }
 
         public List<List<double>> Resolve(List<List<double>> adjacencyMatrix, bool isIncidentMatrix)
         {
             var adjacencyMatrixResult = new List<List<double>>();
             _n = adjacencyMatrix.Count;
-            if (_n >= 3)
+            _failureReason = string.Empty;
+            _adjacencyMatrix = adjacencyMatrix;
+            _isVisitedVertexes = Enumerable.Repeat(false, _n).ToList();
+            _path = new List<int>();
+            if (CheckConnectivity())
             {
-                _adjacencyMatrix = adjacencyMatrix;
                 _isVisitedVertexes = Enumerable.Repeat(false, _n).ToList();
-                _path = new List<int>();
                 FindHamiltonianCycle(0);
-                if (_path.Count > 0)
-                {
-                    adjacencyMatrixResult = ConvertPathToAdjacencyMatrix();
-                }
+            }
+
+            if (_path.Count > 0)
+            {
+                adjacencyMatrixResult = ConvertPathToAdjacencyMatrix();
+            }
+            else
+            {
+                throw new MethodException("Гамільтонів цикл не існує. " + _failureReason);
             }
 
             return adjacencyMatrixResult;
@@ -40,7 +52,7 @@ namespace GraphAlgorithm.Services
             _path.Add(curVertex);
             if (_path.Count == _n)
             {
-                if (_adjacencyMatrix[_path[0]][_path[_n - 1]] < INF) // check if the first and last vertexes are adjacent
+                if (_adjacencyMatrix[_path[_n - 1]][_path[0]] < INF) // check if the first and last vertexes are adjacent
                 {
                     return true;
                 }
@@ -64,6 +76,41 @@ namespace GraphAlgorithm.Services
             _isVisitedVertexes[curVertex] = false;
             _path.RemoveAt(_path.Count - 1);
             return false;
+        }
+
+        private bool CheckConnectivity()
+        {
+            bool result;
+            int nComp = 0;
+            for (int curVertex = 0; curVertex < _n; curVertex++)
+            {
+                if (!_isVisitedVertexes[curVertex])
+                {
+                    nComp++;
+                    dfs(curVertex);
+                }
+            }
+
+            result = nComp == 1;
+
+            if (!result)
+            {
+                _failureReason = "Граф не є зв'язним.";
+            }
+
+            return result;
+        }
+
+        private void dfs(int curVertex)
+        {
+            _isVisitedVertexes[curVertex] = true;
+            for (int nextVertex = 0; nextVertex < _n; nextVertex++)
+            {
+                if (_adjacencyMatrix[curVertex][nextVertex] < INF && !_isVisitedVertexes[nextVertex])
+                {
+                    dfs(nextVertex);
+                }
+            }
         }
 
         private List<List<double>> ConvertPathToAdjacencyMatrix()

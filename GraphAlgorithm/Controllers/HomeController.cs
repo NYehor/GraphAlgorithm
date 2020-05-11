@@ -135,7 +135,8 @@ namespace GraphAlgorithm.Controllers
                 result = new
                 {
                     matrix = resultMatrix,
-                    path = hamiltonianCycle.Path
+                    path = hamiltonianCycle.Path,
+                    exception = string.Empty
                 };
             }
             catch (MethodException ex)
