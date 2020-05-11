@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using GraphAlgorithm.Models;
 using GraphAlgorithm.Services;
-using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using GraphAlgorithm.Services.FloydWarshall;
 using GraphAlgorithm.Services.SearchTree;
@@ -40,16 +39,22 @@ namespace GraphAlgorithm.Controllers
         [HttpGet]
         public JsonResult KruskalAlgorithm(string data)
         {
-            List<List<double>> matrix = JsonConvert.DeserializeObject< List < List<double> >>(data);
+            var matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
 
             Object result;
+
             try
             {
-                if (matrix == null)
-                    throw new MethodException("TEST EXSEPTION");
+                if (matrix == null || !IsSymmetricMatrix(matrix))
+                {
+                    throw new MethodException("Матриця не валiдна або задано орiєнтовний граф. Даний алгоритм може працювати лише iз неорiєнтовними графами");
+                }
+
                 matrix = replaceZeroToInf(matrix);
+                
                 var kruskalAlgorithm = new KruskalAlgorithmService();
                 var resultMatrix = kruskalAlgorithm.Resolve(matrix, false);
+                
                 resultMatrix = replaceInfToZero(resultMatrix);
 
                 result = new
@@ -59,7 +64,8 @@ namespace GraphAlgorithm.Controllers
                     minimalCost = kruskalAlgorithm.MinimalCost
                 };
             }
-            catch (MethodException ex) {
+            catch (MethodException ex) 
+            {
                 result = new
                 {
                     exception = ex.Message
@@ -72,18 +78,24 @@ namespace GraphAlgorithm.Controllers
         [HttpGet]
         public ActionResult PrimAlgorithm(string data)
         {
-            List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+            var matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
 
             Object result;
+
             try
             {
-                if (matrix == null)
-                    throw new MethodException("TEST EXSEPTION");
+                if (matrix == null || !IsSymmetricMatrix(matrix))
+                {
+                    throw new MethodException("Матриця не валiдна або задано орiєнтовний граф. Даний алгоритм може працювати лише iз неорiєнтовними графами");
+                }
 
                 matrix = replaceZeroToInf(matrix);
+                
                 var primAlgorithm = new PrimAlgorithmService();
                 var resultMatrix = primAlgorithm.Resolve(matrix, false);
+                
                 resultMatrix = replaceInfToZero(resultMatrix);
+                
                 result = new
                 {
                     exception = "",
@@ -105,7 +117,8 @@ namespace GraphAlgorithm.Controllers
         [HttpGet]
         public ActionResult HamiltonianCycleAlgorithm(string data)
         {
-            List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+            var matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+
             Object result;
 
             try
@@ -114,8 +127,10 @@ namespace GraphAlgorithm.Controllers
                     throw new MethodException("TEST EXSEPTION");
 
                 matrix = replaceZeroToInf(matrix);
+                
                 var hamiltonianCycle = new HamiltonianCycleAlgirithmService();
                 var resultMatrix = hamiltonianCycle.Resolve(matrix, false);
+                
                 resultMatrix = replaceInfToZero(resultMatrix);
                 result = new
                 {
@@ -136,9 +151,10 @@ namespace GraphAlgorithm.Controllers
 
         public ActionResult FloydWarshallSecondAlgorithm(string data)
         {
-            List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+            var matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
 
             Object result;
+
             try
             {
                 if (matrix == null)
@@ -165,8 +181,10 @@ namespace GraphAlgorithm.Controllers
 
         public ActionResult MaxMatchesAlgorithm(string data)
         {
-            List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+            var matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+
             Object result;
+
             try
             {
                 if (matrix == null)
@@ -194,8 +212,10 @@ namespace GraphAlgorithm.Controllers
 
         public ActionResult WideSearchTreeAlgorithm(string data, int start)
         {
-            int[,] matrix = JsonConvert.DeserializeObject<int[,]>(data);
+            var matrix = JsonConvert.DeserializeObject<int[,]>(data);
+
             Object result;
+
             try
             {
                 if (matrix == null)
@@ -222,8 +242,10 @@ namespace GraphAlgorithm.Controllers
 
         public ActionResult DeepSearchTreeAlgorithm(string data, int start)
         {
-            int[,] matrix = JsonConvert.DeserializeObject<int[,]>(data);
+            var matrix = JsonConvert.DeserializeObject<int[,]>(data);
+
             Object result;
+
             try
             {
                 if (matrix == null) return null;
@@ -248,9 +270,10 @@ namespace GraphAlgorithm.Controllers
 
         public ActionResult DijkstraAlgorithm(string data, int start)
         {
-            List<List<double>> matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+            var matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
 
             Object result;
+
             try
             {
                 if (matrix == null)
@@ -280,10 +303,16 @@ namespace GraphAlgorithm.Controllers
         {
             var INF = double.PositiveInfinity;
 
-            for (int i = 0; i < matrix.Count; i++)
-                for (int j = 0; j < matrix.Count; j++)
+            for (var i = 0; i < matrix.Count; i++)
+            {
+                for (var j = 0; j < matrix.Count; j++)
+                {
                     if (matrix[i][j] == 0)
+                    {
                         matrix[i][j] = INF;
+                    }
+                }
+            }
 
             return matrix;
         }
@@ -292,12 +321,34 @@ namespace GraphAlgorithm.Controllers
         {
             var INF = double.PositiveInfinity;
 
-            for (int i = 0; i < matrix.Count; i++)
-                for (int j = 0; j < matrix.Count; j++)
+            for (var i = 0; i < matrix.Count; i++)
+            {
+                for (var j = 0; j < matrix.Count; j++)
+                {
                     if (matrix[i][j] == INF)
+                    {
                         matrix[i][j] = 0;
+                    }
+                }
+            }
 
             return matrix;
+        }
+
+        private bool IsSymmetricMatrix(List<List<double>> matrix)
+        {
+            for (var i = 0; i < matrix[0].Count; i++)
+            {
+                for (var j = 0; j < matrix[i].Count; j++)
+                {
+                    if (matrix[i][j] != matrix[j][i])
+                    {
+                        return false;
+                    }
+                }
+            }
+            
+            return true;
         }
     }
 }
