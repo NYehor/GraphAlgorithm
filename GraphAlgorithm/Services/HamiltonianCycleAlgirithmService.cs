@@ -13,34 +13,35 @@ namespace GraphAlgorithm.Services
         List<List<double>> _adjacencyMatrix;
         private string _failureReason;
 
-        public string Path => _path != null && _path.Count > 0
-            ? string.Join(" -> ", _path) + " -> " + _path[0]
-            : "Гамильтонов цикл не існує. "+_failureReason;
+        public int[] Path
+        {
+            get
+            {
+                return _path.ToArray();
+            }
+        }
 
         public List<List<double>> Resolve(List<List<double>> adjacencyMatrix, bool isIncidentMatrix)
         {
             var adjacencyMatrixResult = new List<List<double>>();
             _n = adjacencyMatrix.Count;
-            if (_n >= 2)
+            _failureReason = string.Empty;
+            _adjacencyMatrix = adjacencyMatrix;
+            _isVisitedVertexes = Enumerable.Repeat(false, _n).ToList();
+            _path = new List<int>();
+            if (CheckConnectivity())
             {
-                _failureReason = string.Empty;
-                _adjacencyMatrix = adjacencyMatrix;
                 _isVisitedVertexes = Enumerable.Repeat(false, _n).ToList();
-                _path = new List<int>();
-                if (CheckConnectivity())
-                {
-                    _isVisitedVertexes = Enumerable.Repeat(false, _n).ToList();
-                    FindHamiltonianCycle(0);
-                }
-              
-                if (_path.Count > 0)
-                {
-                    adjacencyMatrixResult = ConvertPathToAdjacencyMatrix();
-                }
+                FindHamiltonianCycle(0);
+            }
+
+            if (_path.Count > 0)
+            {
+                adjacencyMatrixResult = ConvertPathToAdjacencyMatrix();
             }
             else
             {
-                _failureReason = "Кількість вершин менша 2.";
+                throw new MethodException("Гамільтонів цикл не існує. " + _failureReason);
             }
 
             return adjacencyMatrixResult;
@@ -51,7 +52,7 @@ namespace GraphAlgorithm.Services
             _path.Add(curVertex);
             if (_path.Count == _n)
             {
-                if (_adjacencyMatrix[_path[0]][_path[_n - 1]] < INF) // check if the first and last vertexes are adjacent
+                if (_adjacencyMatrix[_path[_n - 1]][_path[0]] < INF) // check if the first and last vertexes are adjacent
                 {
                     return true;
                 }
@@ -90,7 +91,7 @@ namespace GraphAlgorithm.Services
                 }
             }
 
-            result = nComp == _n;
+            result = nComp == 1;
 
             if (!result)
             {
