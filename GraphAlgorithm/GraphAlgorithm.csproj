@@ -285,6 +285,14 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Home\IncindenceMatrix.cshtml" />
     <Content Include="Views\Home\Wiki.cshtml" />
+    <Content Include="Views\Home\Algorithms\Kruskal.cshtml" />
+    <Content Include="Views\Home\Algorithms\Prim.cshtml" />
+    <Content Include="Views\Home\Algorithms\HamiltonianCycle.cshtml" />
+    <Content Include="Views\Home\Algorithms\WideSearchTree.cshtml" />
+    <Content Include="Views\Home\Algorithms\Dijkstra.cshtml" />
+    <Content Include="Views\Home\Algorithms\DeepSearchTree.cshtml" />
+    <Content Include="Views\Home\Algorithms\MaxMatches.cshtml" />
+    <Content Include="Views\Home\Algorithms\FloydWarshallSecond.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -3,16 +3,33 @@
     ViewBag.Title = "Довідка";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Довідка</title>
-</head>
-<body>
-    <div> 
-        WIKI
-    </div>
-</body>
-</html>
+<div> 
+    <br>
+    <h2>Алгоритми</h2>
+    <ol>
+        <li>
+            @Html.ActionLink("Алгоритм Крускала", "Kruskal", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Алгоритм Прима", "Prim", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Пошук Гамільтоновго циклу", "HamiltonianCycle", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Алгоритм Дейкстри", "Dijkstra", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Алгоритм Флойда — Воршелла", "FloydWarshallSecond", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("MaxMatches", "MaxMatches", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Пошук у ширину", "WideSearchTree", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Пошук у глибину", "DeepSearchTree", "Home")
+        </li>
+    </ol>
+</div>

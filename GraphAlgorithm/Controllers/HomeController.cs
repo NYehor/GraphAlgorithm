@@ -36,6 +36,46 @@ namespace GraphAlgorithm.Controllers
             return View();
         }
 
+        public ActionResult Kruskal()
+        {
+            return View("Algorithms/Kruskal");
+        }
+
+        public ActionResult Prim()
+        {
+            return View("Algorithms/Prim");
+        }
+
+        public ActionResult HamiltonianCycle()
+        {
+            return View("Algorithms/HamiltonianCycle");
+        }
+
+        public ActionResult DeepSearchTree()
+        {
+            return View("Algorithms/DeepSearchTree");
+        }
+
+        public ActionResult MaxMatches()
+        {
+            return View("Algorithms/MaxMatches");
+        }
+
+        public ActionResult FloydWarshallSecond()
+        {
+            return View("Algorithms/FloydWarshallSecond");
+        }
+
+        public ActionResult Dijkstra()
+        {
+            return View("Algorithms/Dijkstra");
+        }
+
+        public ActionResult WideSearchTree()
+        {
+            return View("Algorithms/WideSearchTree");
+        }
+
         [HttpGet]
         public JsonResult KruskalAlgorithm(string data)
         {
