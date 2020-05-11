@@ -4,11 +4,11 @@ var isOrientedGraph = true;
 
 let cy = cytoscape({
 
-    container: document.getElementById('cy'), 
+    container: document.getElementById('cy'),
 
     elements: [],
 
-    style: [ 
+    style: [
         {
             selector: 'node',
             style: {
@@ -140,12 +140,12 @@ function addEdges() {
 function isOriented(matrix) {
     var flag = false;
 
-    for (var i = 0; i < matrix.length; i++) 
+    for (var i = 0; i < matrix.length; i++)
         for (var j = 0; j < matrix.length; j++) {
             if (matrix[i][j] != matrix[j][i]) {
                 flag = true;
                 return flag;
-            }              
+            }
         }
 
     return flag
@@ -355,7 +355,7 @@ function dialogShowMatrix(text, matrix) {
     var button = document.createElement('button');
     button.type = "button";
     button.className = "btn btn-primary";
-    button.textContent = "Показать матрицу";
+    button.textContent = "Показати матрицю";
     button.style = "float:right";
     button.addEventListener('click', function () {
         $('#dialogModalShowMatrix').modal();
@@ -374,7 +374,7 @@ document.getElementById('kruskalAlgorithmId').addEventListener('click', function
         $.get('/Home/KruskalAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                var message = "Мінімальна ціна: " + data.minimalCost;
+                var message = "Мінімальна вага: " + data.minimalCost;
                 dialogShowMatrix(message, data.matrix);
             }
             else
@@ -390,9 +390,9 @@ document.getElementById('primAlgorithmId').addEventListener('click', function ()
     if (graphMatrix.length > 0) {
 
         $.get('/Home/PrimAlgorithm', $.param({ data: matrix }, true), function (data) {
-           
+
             if (data.exception == "") {
-                var message = "Мінімальна ціна: " + data.minimalCost;
+                var message = "Мінімальна вага: " + data.minimalCost;
                 dialogShowMatrix(message, data.matrix);
             }
             else
@@ -417,7 +417,7 @@ document.getElementById('hamiltonianCycleAlgorithmId').addEventListener('click',
 
                 for (var i = 0; i < data.path.length; i++)
                     message += cy.nodes()[data.path[i]].data('id') + '->';
-                
+
                 dialogShowMatrix(message, data.matrix);
             }
             else
@@ -472,20 +472,19 @@ document.getElementById('dijkstraAlgorithmId').addEventListener('click', functio
 
                 if (data.exception == "") {
 
-                    var str='';
+                    var str = '';
                     for (var i = 0; i < data.matrix.length; i++) {
                         var path = data.matrix[i].Path;
                         var stringPath = '[ ';
-                        for (var j = 0; j < path.length; j++)
-                        {
+                        for (var j = 0; j < path.length; j++) {
                             stringPath += path[j];
                             stringPath += j < path.length - 1 ? ", " : " ]";
                         }
                         var index = data.matrix[i].VerticeNumber;
                         var vertex = cy.nodes()[index - 1].data('id');
-                        str += "Вершина: " + vertex + " - Длина: " + data.matrix[i].PathLength + "- Путь: " +stringPath;
+                        str += "Вершина: " + vertex + " - Длина: " + data.matrix[i].PathLength + "- Путь: " + stringPath;
                     }
-                  
+
                     showMessage(str);
                 }
                 else
@@ -537,4 +536,3 @@ document.getElementById('deepSearchTreeAlgorithmId').addEventListener('click', f
         chooseNode(func);
     }
 })
-
