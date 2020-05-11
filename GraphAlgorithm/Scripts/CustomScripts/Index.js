@@ -327,17 +327,13 @@ function chooseNode(func) {
     cy.on('tap', function (evt) {
         var node = evt.target;
 
-        if (node == cy) return;
-
-        var dict = {};
-        var length = cy.nodes().length;
-        for (var i = 0; i < length; i++) {
-            dict[cy.nodes()[i].data('id')] = i;
+        try {
+            func(cy.nodes().indexOf(node));
+            cy.removeListener('tap');
         }
-        var id = node.data('id');
-        func(dict[id]);
-        console.log(id);
-        cy.removeListener('tap');
+        catch (error) {
+            console.log(error)
+        }
     });
 }
 
