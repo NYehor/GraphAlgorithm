@@ -440,6 +440,23 @@ document.getElementById('floydWarshallSecondAlgorithmId').addEventListener('clic
     }
 })
 
+document.getElementById('floydWarshallFirstAlgorithmId').addEventListener('click', function () {
+    var graphMatrix = getAdjacencyMatrix();
+    var matrix = JSON.stringify(graphMatrix);
+
+    if (graphMatrix.length > 0) {
+
+        $.get('/Home/FloydWarshallFirstAlgorithm', $.param({ data: matrix }, true), function (data) {
+
+            if (data.exception == "") {
+                dialogShowMatrix("", data.matrix);
+            }
+            else
+                showMessage(data.exception);
+        });
+    }
+})
+
 document.getElementById('maxMatchesAlgorithmId').addEventListener('click', function () {
     var graphMatrix = getAdjacencyMatrix();
     var matrix = JSON.stringify(graphMatrix);
