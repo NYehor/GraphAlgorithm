@@ -127,7 +127,10 @@
     <Compile Include="Models\IndexViewModel.cs" />
     <Compile Include="Services\DijkstraAlgorithm\Dijkstra.cs" />
     <Compile Include="Services\DijkstraAlgorithm\Graph.cs" />
+    <Compile Include="Services\FloydWarshall\DoubleExtensions.cs" />
+    <Compile Include="Services\FloydWarshall\FloydWarshallFirtsAlgorithm.cs" />
     <Compile Include="Services\FloydWarshall\FloydWarshallSecondAlgorithm.cs" />
+    <Compile Include="Services\FloydWarshall\ImmutableListExtensions.cs" />
     <Compile Include="Services\HamiltonianCycleAlgirithmService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\MaxMatches.cs" />

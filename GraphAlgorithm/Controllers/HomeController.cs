@@ -190,6 +190,36 @@ namespace GraphAlgorithm.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult FloydWarshallFirstAlgorithm(string data)
+        {
+            var matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
+
+            Object result;
+
+            try
+            {
+                if (matrix == null)
+                    throw new MethodException("TEST EXSEPTION");
+
+                var method = new FloydWarshallFirtsAlgorithm();
+                var resultMatrix = method.Resolve(matrix);
+                result = new
+                {
+                    exception = "",
+                    matrix = resultMatrix
+                };
+            }
+            catch (MethodException ex)
+            {
+                result = new
+                {
+                    exception = ex.Message
+                };
+            }
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult FloydWarshallSecondAlgorithm(string data)
         {
             var matrix = JsonConvert.DeserializeObject<List<List<double>>>(data);
