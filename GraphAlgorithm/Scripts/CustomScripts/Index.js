@@ -449,7 +449,7 @@ document.getElementById('maxMatchesAlgorithmId').addEventListener('click', funct
         $.get('/Home/MaxMatchesAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                dialogShowMatrix("", JSON.parse(data.matrix));
+                dialogShowMatrix("", data.matrix);
             }
             else
                 showMessage(data.exception);
@@ -465,24 +465,29 @@ document.getElementById('dijkstraAlgorithmId').addEventListener('click', functio
 
         var func = function (id) {
             id++;
-            $.get('/Home/DijkstraAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
+            $.get('/Home/DijkstraAlgorithm', $.param({ data: matrix, start: id }, true), function (responseData) {
 
-                if (data.exception == "") {
+                if (responseData.exception == "") {
 
-                    var str = '';
-                    for (var i = 0; i < data.matrix.length; i++) {
-                        var path = data.matrix[i].Path;
+                    
+                    showMessage("");
+                    var message = document.getElementById('message');
+                    for (var i = 0; i < responseData.matrix.length; i++) {
+                        var path = responseData.matrix[i].Path;
                         var stringPath = '[ ';
                         for (var j = 0; j < path.length; j++) {
-                            stringPath += path[j];
+                            stringPath += cy.nodes()[path[j] - 1].data('id');
                             stringPath += j < path.length - 1 ? ", " : " ]";
                         }
-                        var index = data.matrix[i].VerticeNumber;
+                        var index = responseData.matrix[i].VerticeNumber;
                         var vertex = cy.nodes()[index - 1].data('id');
-                        str += "Вершина: " + vertex + " - Длина: " + data.matrix[i].PathLength + "- Путь: " + stringPath;
-                    }
 
-                    showMessage(str);
+                        var div = document.createElement('div');
+                        div.textContent = "Вершина: " + vertex + " - Длина: " + responseData.matrix[i].PathLength + " - Путь: " + stringPath;
+                        div.style = "float:left";
+                        message.appendChild(div);
+                        message.appendChild(document.createElement('br'));
+                    }
                 }
                 else
                     showMessage(data.exception);
@@ -503,7 +508,11 @@ document.getElementById('wideSearchTreeAlgorithmId').addEventListener('click', f
             $.get('/Home/WideSearchTreeAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
 
                 if (data.exception == "") {
-                    showMessage(data.matrix);
+                    var message = "Порядок обходу: ";
+                    for (var i = 0; i < data.matrix.length - 1; i++)
+                        message += cy.nodes()[data.matrix[i]].data('id') + '->';
+                    message += cy.nodes()[data.matrix[data.matrix.length - 1]].data('id');
+                    showMessage(message);
                 }
                 else
                     showMessage(data.exception);
@@ -523,7 +532,11 @@ document.getElementById('deepSearchTreeAlgorithmId').addEventListener('click', f
         var func = function (id) {
             $.get('/Home/DeepSearchTreeAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
                 if (data.exception == "") {
-                    showMessage(data.matrix);
+                    var message = "Порядок обходу: ";              
+                    for (var i = 0; i < data.matrix.length - 1; i++)
+                        message += cy.nodes()[data.matrix[i]].data('id') + '->';
+                    message += cy.nodes()[data.matrix[data.matrix.length - 1]].data('id');
+                    showMessage(message);
                 }
                 else
                     showMessage(data.exception);
