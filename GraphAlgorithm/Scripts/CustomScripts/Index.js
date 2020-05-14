@@ -31,7 +31,8 @@ let cy = cytoscape({
                 'color': '#777'
             }
         }
-    ]
+    ],
+    wheelSensitivity: 0.2
 });
 
 window.onload = function () {
