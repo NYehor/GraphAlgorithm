@@ -1,6 +1,7 @@
 ﻿var amountOfNode = 0;
 var amountOfEdge = 0;
 var isOrientedGraph = true;
+var isWeightedGraph = false;
 
 let cy = cytoscape({
 
@@ -26,7 +27,7 @@ let cy = cytoscape({
                 'curve-style': 'bezier',
                 'target-arrow-color': '#369',
                 'target-arrow-shape': 'triangle',
-                'label': 'data(label)',
+                'label': '',
                 'font-size': '14px',
                 'color': '#777'
             }
@@ -133,7 +134,7 @@ function addEdges() {
             source: document.getElementById('firstSelected').value,
             target: document.getElementById('secondSelected').value,
             directed: isOrientedGraph,
-            label: val,
+            weight: val
         }
     });
 }
@@ -152,15 +153,36 @@ function isOriented(matrix) {
     return flag
 }
 
+function isWeighted(matrix) {
+    var flag = false;
+
+    for (var i = 0; i < matrix.length; i++)
+        for (var j = 0; j < matrix.length; j++) {
+            if (matrix[i][j] != 1)
+                if (matrix[i][j] != 0) {
+                    flag = true;
+                    return flag;
+                }
+        }
+
+    return flag
+}
+
 function loadNewGraph(matrix, adjacency) {
 
     if (!adjacency)
         matrix = incidenceToAdjacency(matrix);
 
     if (isOriented(matrix))
-        createOrientedGraph();
+        if (isWeighted(matrix))
+            createOrientedWeightedGraph();
+        else
+            createDisorientedUnweightedGraph();
     else
-        createDisorientedGraph();
+        if (isWeighted(matrix))
+            createDisorientedWeightedGraph();
+        else
+            createDisorientedUnweightedGraph();
 
     cy.add(convertToElements(matrix));
 
@@ -203,7 +225,7 @@ function getAdjacencyMatrix() {
         var source = cy.edges()[i].data('source');
         var target = cy.edges()[i].data('target');
 
-        matrix[dict[source]][dict[target]] = parseInt(cy.elements().edges()[i].data('label'));
+        matrix[dict[source]][dict[target]] = parseInt(cy.elements().edges()[i].data('weight'));
     }
 
     var condition = cy.edges()[0].data('directed');
@@ -283,23 +305,54 @@ function incidenceSaveChanges() {
     loadNewGraph(matrix, false)
 }
 
-function createOrientedGraph() {
+function createOrientedUnweightedGraph() {
     removeElement();
     isOrientedGraph = true;
+    isWeightedGraph = false;
 
     cy.style().selector('edge')
         .style({
             'target-arrow-color': '#369',
             'target-arrow-shape': 'triangle',
+            'label': '',
         }).update();
 }
 
-function createDisorientedGraph() {
+function createDisorientedUnweightedGraph() {
     removeElement();
     isOrientedGraph = false;
+    isWeightedGraph = false;
 
     cy.style().selector('edge')
-        .style('target-arrow-shape', 'none').update();
+        .style({
+            'target-arrow-shape': 'none',
+            'label': '',
+        }).update();
+}
+
+function createOrientedWeightedGraph() {
+    removeElement();
+    isOrientedGraph = true;
+    isWeightedGraph = true;
+
+    cy.style().selector('edge')
+        .style({
+            'target-arrow-color': '#369',
+            'target-arrow-shape': 'triangle',
+            'label': 'data(weight)',
+        }).update();
+}
+
+function createDisorientedWeightedGraph() {
+    removeElement();
+    isOrientedGraph = false;
+    isWeightedGraph = true;
+
+    cy.style().selector('edge')
+        .style({
+            'target-arrow-shape': 'none',
+            'label': 'data(weight)',
+        }).update();
 }
 
 function toStr(matrix) {

@@ -3,8 +3,27 @@
     ViewBag.Title = "Довідка";
 }
 
-<div> 
+<div>
     <br>
+    <h2>Створення та редагування графа</h2>
+    <ol>
+        <li>
+            @Html.ActionLink("Додавання вершин", "Kruskal", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Додавання дуг", "Prim", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("З'єднання вершин графа", "FloydWarshallSecond", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Переміщення вершин", "HamiltonianCycle", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Збереження графа", "Dijkstra", "Home")
+        </li>
+    </ol>
+
     <h2>Алгоритми</h2>
     <ol>
         <li>
