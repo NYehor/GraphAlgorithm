@@ -467,7 +467,7 @@ document.getElementById('maxMatchesAlgorithmId').addEventListener('click', funct
         $.get('/Home/MaxMatchesAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                dialogShowMatrix("", JSON.parse(data.matrix));
+                dialogShowMatrix("", data.matrix);
             }
             else
                 showMessage(data.exception);

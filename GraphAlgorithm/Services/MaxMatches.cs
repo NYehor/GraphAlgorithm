@@ -1,20 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GraphAlgorithm.Services
 {
     public class MaxMatches
     {
+        List<List<double>> edgesMatrix;
+        List<int> u = new List<int>();
+        List<int> v = new List<int>();
+
         bool FindPath(int u1, List<List<double>> matrix, List<int> matching, List<bool> visited)
         {
             visited[u1] = true;
-            for (int v = 0; v < matching.Count; ++v)
+            foreach (int vi in v)
             {
-                int u2 = matching[v];
+                int u2 = matching[vi];
 
-                if (matrix[u1][v] == 1 && (u2 == -1 || !visited[u2] && FindPath(u2, matrix, matching, visited)))
+                if (matrix[u1][vi] == 1 && (u2 == -1 || !visited[u2] && FindPath(u2, matrix, matching, visited)))
                 {
-                    matching[v] = u1;
+                    matching[vi] = u1;
                     return true;
                 }
             }
@@ -23,20 +26,17 @@ namespace GraphAlgorithm.Services
 
         public List<List<double>> Resolve(List<List<double>> matrix, bool isIncidentMatrix)
         {
-            if (!ValidateMatrix(matrix))
-            {
-                throw new MethodException("Matrix is not valid.");
-            }
+            ValidateMatrix(matrix);
 
-            int leftPart = matrix.Count;
-            int rightPart = matrix[0].Count;
+            int leftPart = u.Count;
+            int rightPart = v.Count;
 
             List<int> matching = new List<int>();
 
-            matching.FillInt(-1, rightPart);
+            matching.FillInt(-1, rightPart+ leftPart);
 
-            for (int i = 0; i < leftPart; i++)
-                FindPath(i, matrix, matching, new List<bool>().FillBool(false, rightPart));
+            foreach (int ui in u)
+                FindPath(ui, matrix, matching, new List<bool>().FillBool(false, leftPart));
 
             for (int i = 0; i < matrix.Count; i++)
             {
@@ -48,24 +48,103 @@ namespace GraphAlgorithm.Services
                     if (index >= 0)
                     {
                         matrix[index][j] = 1;
+                        matrix[j][index] = 1;
                     }
                 }
             }
             return matrix;
         }
 
-        private bool ValidateMatrix(List<List<double>> matrix)
+        private void ValidateMatrix(List<List<double>> matrix)
         {
             if (matrix.Count == 0)
-                return false;
+                throw new MethodException("Матриця має некоректні дані.");
 
             for (int i = 0; i < matrix.Count; i++)
             {
                 if (matrix[i].Count == 0)
-                    return false;
+                    throw new MethodException("Матриця має некоректні дані.");
+
+                for (int j = 0; j < matrix[i].Count; j++)
+                {
+                    if (matrix[i][j] > 1 && matrix[i][j] < 0)
+                    {
+                        throw new MethodException("Матриця має некоректні дані.");
+                    }
+                }
             }
 
-            return true;
+            if (!CheckDicotyledonousGraph(matrix))
+            {
+                throw new MethodException("Граф не є двоїстим.");
+            }
+        }
+
+        public bool CheckDicotyledonousGraph(List<List<double>> g)
+        {
+            Queue<int> q = new Queue<int>();
+            int u = g.Count - 1;
+            bool[] used = new bool[g.Count];
+            int[] paintedVertexes = new int[g.Count];
+            bool Dicotyledonous = true;
+            int color = 2;
+
+            used[u] = true;
+
+            q.Enqueue(u);
+
+            while (q.Count != 0 && Dicotyledonous)
+            {
+                u = q.Peek();
+                q.Dequeue();
+
+                if (paintedVertexes[u] == 0)
+                {
+                    paintedVertexes[u] = color;
+                    color = color == 1 ? 2 : 1;
+                }
+
+                for (int i = 0; i < g.Count; i++)
+                {
+                    if (g[u][i] == 1)
+                    {
+                        if (paintedVertexes[i] == paintedVertexes[u])
+                        {
+                            Dicotyledonous = false;
+                            break;
+                        }
+
+                        if (!used[i])
+                        {
+                            used[i] = true;
+                            paintedVertexes[i] = paintedVertexes[u] == 1 ? 2 : 1;
+                            q.Enqueue(i);
+                        }
+                    }
+                }
+            }
+
+            if (Dicotyledonous)
+            {
+                BuildEdgeMatrix(paintedVertexes);
+            }
+
+            return Dicotyledonous;
+        }
+
+        private void BuildEdgeMatrix(int[] paintedVertexes)
+        {
+            for (int i = 0; i < paintedVertexes.Length; i++)
+            {
+                if (paintedVertexes[i] == 1)
+                {
+                    u.Add(i);
+                }
+                else
+                {
+                    v.Add(i);
+                }
+            }
         }
     }
 
