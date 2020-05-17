@@ -131,8 +131,8 @@ window.onload = function () {
 function addEdges() {
     amountOfEdge++;
     var val = document.getElementById('valueOfEdge').value;
-    if (val == '')
-        val = '1';
+    if (val == '') return;
+        
 
     cy.add({
         group: 'edges', data: {
@@ -176,6 +176,7 @@ function isWeighted(matrix) {
 
 function loadNewGraph(matrix, adjacency) {
 
+    document.getElementById('defaultBtn').click();
     if (!adjacency)
         matrix = incidenceToAdjacency(matrix);
 
@@ -412,6 +413,9 @@ function dialogShowMatrix(text, matrix) {
     while (message.firstChild)
         message.removeChild(message.firstChild);
 
+    var div = document.createElement('div');
+    div.className = "text-center";
+    div.textContent = text;
     var button = document.createElement('button');
     button.type = "button";
     button.className = "btn btn-primary";
@@ -421,8 +425,9 @@ function dialogShowMatrix(text, matrix) {
         $('#dialogModalShowMatrix').modal();
         document.getElementById('textMatrix').value = str;
     })
-    message.textContent = text;
-    message.appendChild(button);
+    div.appendChild(button);
+    message.appendChild(div);
+    message.appendChild(document.createElement('br'));
 }
 
 document.getElementById('kruskalAlgorithmId').addEventListener('click', function () {
@@ -434,7 +439,7 @@ document.getElementById('kruskalAlgorithmId').addEventListener('click', function
         $.get('/Home/KruskalAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                var message = "Мінімальна вага: " + data.minimalCost;
+                var message = "Алгоритм Крускала. Мінімальна вага: " + data.minimalCost;
                 dialogShowMatrix(message, data.matrix);
             }
             else
@@ -452,7 +457,7 @@ document.getElementById('primAlgorithmId').addEventListener('click', function ()
         $.get('/Home/PrimAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                var message = "Мінімальна вага: " + data.minimalCost;
+                var message = "Алгоритм Прима. Мінімальна вага: " + data.minimalCost;
                 dialogShowMatrix(message, data.matrix);
             }
             else
@@ -492,7 +497,7 @@ document.getElementById('floydWarshallSecondAlgorithmId').addEventListener('clic
         $.get('/Home/FloydWarshallSecondAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                dialogShowMatrix("", data.matrix);
+                dialogShowMatrix("Алгоритм Флойда — Воршелла (II)", data.matrix);
             }
             else
                 showMessage(data.exception);
@@ -509,7 +514,7 @@ document.getElementById('floydWarshallFirstAlgorithmId').addEventListener('click
         $.get('/Home/FloydWarshallFirstAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                dialogShowMatrix("", data.matrix);
+                dialogShowMatrix("Алгоритм Флойда — Воршелла (I)", data.matrix);
             }
             else
                 showMessage(data.exception);
@@ -526,7 +531,7 @@ document.getElementById('maxMatchesAlgorithmId').addEventListener('click', funct
         $.get('/Home/MaxMatchesAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                dialogShowMatrix("", data.matrix);
+                dialogShowMatrix("Паросполучення.", data.matrix);
             }
             else
                 showMessage(data.exception);
