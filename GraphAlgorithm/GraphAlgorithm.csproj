@@ -151,6 +151,7 @@
     <Content Include="Content\Images\AdjMatrix.jpg" />
     <Content Include="Content\Images\ConnectNodes.jpg" />
     <Content Include="Content\Images\DisorientedGraph.jpg" />
+    <Content Include="Content\Images\FloydWarshallResultMatrixExample.png" />
     <Content Include="Content\Images\Menu.jpg" />
     <Content Include="Content\Images\MenuMatrix.jpg" />
     <Content Include="Content\Images\Methods.jpg" />
@@ -304,7 +305,7 @@
     <Content Include="Views\Home\Algorithms\Dijkstra.cshtml" />
     <Content Include="Views\Home\Algorithms\DeepSearchTree.cshtml" />
     <Content Include="Views\Home\Algorithms\MaxMatches.cshtml" />
-    <Content Include="Views\Home\Algorithms\FloydWarshallSecond.cshtml" />
+    <Content Include="Views\Home\Algorithms\FloydWarshall.cshtml" />
     <Content Include="Views\Home\Wiki\AddVertices.cshtml" />
     <Content Include="Views\Home\Wiki\AddEdges.cshtml" />
     <Content Include="Views\Home\Wiki\Graph.cshtml" />
