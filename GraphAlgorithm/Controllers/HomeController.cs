@@ -113,6 +113,11 @@ namespace GraphAlgorithm.Controllers
                     throw new MethodException("Матриця не валiдна або задано орiєнтовний граф. Даний алгоритм може працювати лише iз неорiєнтовними графами");
                 }
 
+                if (!IsConnectivityGraph(matrix))
+                {
+                    throw new MethodException("Граф не є зв'язним");
+                }
+
                 matrix = replaceZeroToInf(matrix);
 
                 var kruskalAlgorithm = new KruskalAlgorithmService();
@@ -150,6 +155,11 @@ namespace GraphAlgorithm.Controllers
                 if (matrix == null || !IsSymmetricMatrix(matrix))
                 {
                     throw new MethodException("Матриця не валiдна або задано орiєнтовний граф. Даний алгоритм може працювати лише iз неорiєнтовними графами");
+                }
+
+                if (!IsConnectivityGraph(matrix))
+                {
+                    throw new MethodException("Граф не є зв'язним");
                 }
 
                 matrix = replaceZeroToInf(matrix);
@@ -370,8 +380,10 @@ namespace GraphAlgorithm.Controllers
 
             try
             {
-                if (matrix == null)
-                    throw new MethodException("TEST EXSEPTION");
+                if (matrix == null || !IsConnectivityGraph(matrix))
+                {
+                    throw new MethodException("Граф не є зв'язним");
+                }
 
                 matrix = replaceZeroToInf(matrix);
                 var method = new Dijkstra(matrix);
@@ -439,6 +451,30 @@ namespace GraphAlgorithm.Controllers
                     {
                         return false;
                     }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsConnectivityGraph(List<List<double>> matrix)
+        {
+            for (int i = 0; i < matrix[0].Count; i++)
+            {
+                var nodeIsConnected = false;
+
+                for (int j = 0; j < matrix[i].Count; j++)
+                {
+                    if (matrix[i][j] != 0 || matrix[j][i] != 0)
+                    {
+                        nodeIsConnected = true;
+                        break;
+                    }
+                }
+
+                if (!nodeIsConnected)
+                {
+                    return false;
                 }
             }
 
