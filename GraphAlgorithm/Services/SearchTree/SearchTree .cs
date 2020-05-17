@@ -19,7 +19,7 @@ namespace GraphAlgorithm.Services.SearchTree
             {
                 throw new MethodException("Індекс вершини за межами графа " + startNodeId);
             }
-            if (nodes[startNodeId].Nodes.Lenght == 0)
+            if (nodes[startNodeId].Nodes.Count == 0)
             {
                 throw new MethodException("Початково задана вершина графа ізольована " + startNodeId);
             }
@@ -56,7 +56,7 @@ namespace GraphAlgorithm.Services.SearchTree
             {
                 throw new MethodException("Індекс вершини за межами графа " + startNodeId);
             }
-            if (nodes[startNodeId].Nodes.Lenght == 0)
+            if (nodes[startNodeId].Nodes.Count == 0)
             {
                 throw new MethodException("Початково задана вершина графа ізольована " + startNodeId);
             }
