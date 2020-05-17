@@ -84,9 +84,9 @@ namespace GraphAlgorithm.Controllers
             return View("Algorithms/MaxMatches");
         }
 
-        public ActionResult FloydWarshallSecond()
+        public ActionResult FloydWarshall()
         {
-            return View("Algorithms/FloydWarshallSecond");
+            return View("Algorithms/FloydWarshall");
         }
 
         public ActionResult Dijkstra()

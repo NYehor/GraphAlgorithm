@@ -494,13 +494,8 @@ document.getElementById('floydWarshallSecondAlgorithmId').addEventListener('clic
 
     if (graphMatrix.length > 0) {
 
-        $.get('/Home/FloydWarshallSecondAlgorithm', $.param({ data: matrix }, true), function (data) {
-
-            if (data.exception == "") {
-                dialogShowMatrix("Алгоритм Флойда — Воршелла (II)", data.matrix);
-            }
-            else
-                showMessage(data.exception);
+        $.get('/Home/FloydWarshallSecondAlgorithm', $.param({ data: matrix }, true), function(data) {
+            floydWarshallAlgCallback("Алгоритм Флойда — Воршелла (II)", data);
         });
     }
 })
@@ -512,15 +507,37 @@ document.getElementById('floydWarshallFirstAlgorithmId').addEventListener('click
     if (graphMatrix.length > 0) {
 
         $.get('/Home/FloydWarshallFirstAlgorithm', $.param({ data: matrix }, true), function (data) {
-
-            if (data.exception == "") {
-                dialogShowMatrix("Алгоритм Флойда — Воршелла (I)", data.matrix);
-            }
-            else
-                showMessage(data.exception);
+            floydWarshallAlgCallback("Алгоритм Флойда — Воршелла (I)", data);
         });
     }
-})
+});
+
+function floydWarshallAlgCallback(methodName, data) {
+
+    if (data.exception == "") {
+        showMessage("");
+        dialogShowMatrix(methodName, data.matrix);
+        createMatrixExplanation(data.matrix);
+    }
+    else
+        showMessage(data.exception);
+
+    function createMatrixExplanation(matrix) {
+        for (let i = 0; i < matrix.length; i++) {
+            for (let j = 0; j < matrix.length; j++) {
+                if (matrix[i][j] != 0) {
+                    var message = document.getElementById('message');
+
+                    var div = document.createElement('div');
+                    div.textContent = `Довжина шляху з вершини n${i + 1} у вершину n${j + 1}: ${matrix[i][j]}`;
+                    div.style = "float:left";
+                    message.appendChild(div);
+                    message.appendChild(document.createElement('br'));
+                }
+            }
+        }
+    }
+}
 
 document.getElementById('maxMatchesAlgorithmId').addEventListener('click', function () {
     var graphMatrix = getAdjacencyMatrix();
