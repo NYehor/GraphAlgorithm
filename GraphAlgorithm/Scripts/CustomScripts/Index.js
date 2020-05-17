@@ -99,7 +99,13 @@ window.onload = function () {
         message.textContent = "Виділіть першу вершину для створення дуги";
 
         cy.on('tap', 'node', function (evt) {
-            $('#connectDialog').modal();
+
+            if (!isWeightedGraph)
+                document.getElementById('weightInput').style = "display:none";
+            else
+                document.getElementById('weightInput').style = "";
+
+            $('#connectDialog').modal()
 
             var selectedId = evt.target.data('id');
             document.getElementById('firstSelected').value = selectedId;

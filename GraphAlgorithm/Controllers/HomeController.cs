@@ -35,7 +35,30 @@ namespace GraphAlgorithm.Controllers
         {
             return View();
         }
+        public ActionResult AddVertices()
+        {
+            return View("Wiki/AddVertices");
+        }
 
+        public ActionResult AddEdges()
+        {
+            return View("Wiki/AddEdges");
+        }
+
+        public ActionResult AlgorithmSelection()
+        {
+            return View("Wiki/AlgorithmSelection");
+        }
+
+        public ActionResult MovingVertices()
+        {
+            return View("Wiki/MovingVertices");
+        }
+
+        public ActionResult Graph()
+        {
+            return View("Wiki/Graph");
+        }
         public ActionResult Kruskal()
         {
             return View("Algorithms/Kruskal");

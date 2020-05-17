@@ -147,6 +147,15 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Home.css" />
+    <Content Include="Content\Images\AddNodes.jpg" />
+    <Content Include="Content\Images\AdjMatrix.jpg" />
+    <Content Include="Content\Images\ConnectNodes.jpg" />
+    <Content Include="Content\Images\DisorientedGraph.jpg" />
+    <Content Include="Content\Images\Menu.jpg" />
+    <Content Include="Content\Images\MenuMatrix.jpg" />
+    <Content Include="Content\Images\Methods.jpg" />
+    <Content Include="Content\Images\SaveFile.jpg" />
+    <Content Include="Content\Images\WeightedGraph.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -296,6 +305,12 @@
     <Content Include="Views\Home\Algorithms\DeepSearchTree.cshtml" />
     <Content Include="Views\Home\Algorithms\MaxMatches.cshtml" />
     <Content Include="Views\Home\Algorithms\FloydWarshallSecond.cshtml" />
+    <Content Include="Views\Home\Wiki\AddVertices.cshtml" />
+    <Content Include="Views\Home\Wiki\AddEdges.cshtml" />
+    <Content Include="Views\Home\Wiki\Graph.cshtml" />
+    <Content Include="Views\Home\Wiki\MovingVertices.cshtml" />
+    <Content Include="Views\Home\Wiki\AlgorithmSelection.cshtml" />
+    <Content Include="Views\Home\Wiki\AdjacencyMatrixWiki.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

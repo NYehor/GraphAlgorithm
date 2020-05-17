@@ -22,7 +22,7 @@
                 <button class="dropdown-item" onclick="createDisorientedWeightedGraph()">Створити неорієнтований зважений граф</button>
                 <div class="dropdown-divider"></div>
                 <button id="tmpLi" class="dropdown-item">
-                    <label for="openFileBtn" style="width:inherit" accept=".txt">Відкрити</label>
+                    <label type="button" for="openFileBtn" style="width:inherit" accept=".txt">Відкрити</label>
                     <input id="openFileBtn" onclick="this.value=null;" style="display:none;" type="file">
                 </button>
                 <button class="dropdown-item" data-toggle="modal" data-target="#saveDialog" style="width:inherit">Зберегти</button>
@@ -33,7 +33,7 @@
                 <button class="dropdown-item" onclick="removeElement()" style="width:inherit">Видалити</button>
             </div>
         </li>
-        <li type="button" class="btn btn-secondary margin-right" id="defaultBtn">За замовчуванням</li>
+        <li type="button" class="btn btn-secondary margin-right" id="defaultBtn">Пересунути</li>
         <li type="button" class="btn btn-primary margin-right" id="addBtn">Додати</li>
 
         <li type="button" class="btn btn-primary margin-right" id="connectBtn">З'єднати</li>
@@ -51,7 +51,7 @@
                 <button id="dijkstraAlgorithmId" class="dropdown-item">Алгоритм Дейкстри</button>
                 <button id="floydWarshallFirstAlgorithmId" class="dropdown-item">Алгоритм Флойда — Воршелла (I)</button>
                 <button id="floydWarshallSecondAlgorithmId" class="dropdown-item">Алгоритм Флойда — Воршелла (II)</button>
-                <button id="maxMatchesAlgorithmId" class="dropdown-item">MaxMatches</button>
+                <button id="maxMatchesAlgorithmId" class="dropdown-item">Паросполучення</button>
                 <div class="dropdown-divider"></div>
                 <button id="wideSearchTreeAlgorithmId" class="dropdown-item">Пошук у ширину</button>
                 <button id="deepSearchTreeAlgorithmId" class="dropdown-item">Пошук у глибину</button>
@@ -147,8 +147,8 @@
                 <datalist id="browsers">
                 </datalist>
             </div>
-            <div class="modal-body text-center">
-                Вага: <input id="valueOfEdge" value="0">
+            <div id="weightInput" class="modal-body text-center" style="display:none">
+                Вага: <input type="number" id="valueOfEdge" value="0">
             </div>
             <div class="modal-footer text-md-center">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdges()">Створити</button>

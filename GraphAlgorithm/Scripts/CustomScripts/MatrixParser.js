@@ -58,7 +58,7 @@ function convertToElements(matrix) {
                 if (matrix[j][i] != 0) {
                     elements.push({
                         group: 'edges',
-                        data: { id: 'e' + index, source: 'n' + (j + 1), target: 'n' + (i + 1), weight: matrix[i][j], directed: state }
+                        data: { id: 'e' + index, source: 'n' + (j + 1), target: 'n' + (i + 1), weight: matrix[j][i], directed: state }
                     });
                     index++;
                 }

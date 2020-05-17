@@ -8,19 +8,25 @@
     <h2>Створення та редагування графа</h2>
     <ol>
         <li>
-            @Html.ActionLink("Додавання вершин", "Kruskal", "Home")
+            @Html.ActionLink("Граф", "Graph", "Home")
         </li>
         <li>
-            @Html.ActionLink("Додавання дуг", "Prim", "Home")
+            @Html.ActionLink("Додавання вершин", "AddVertices", "Home")
         </li>
         <li>
-            @Html.ActionLink("З'єднання вершин графа", "FloydWarshallSecond", "Home")
+            @Html.ActionLink("Додавання дуг", "AddEdges", "Home")
         </li>
         <li>
-            @Html.ActionLink("Переміщення вершин", "HamiltonianCycle", "Home")
+            @Html.ActionLink("Вибір алгоритму", "AlgorithmSelection", "Home")
         </li>
         <li>
-            @Html.ActionLink("Збереження графа", "Dijkstra", "Home")
+            @Html.ActionLink("Переміщення вершин", "MovingVertices", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Побудова графа по матриці суміжності", "Graph", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Побудова графа по матриці інцидентності", "Graph", "Home")
         </li>
     </ol>
 
