@@ -131,8 +131,8 @@ window.onload = function () {
 function addEdges() {
     amountOfEdge++;
     var val = document.getElementById('valueOfEdge').value;
-    if (val == '') return;
-        
+    if (val == '' && isWeightedGraph) return;
+    if (val == '') val = 1;
 
     cy.add({
         group: 'edges', data: {
@@ -402,7 +402,12 @@ function showMessage(text) {
     var message = document.getElementById('message');
     while (message.firstChild)
         message.removeChild(message.firstChild);
-    message.textContent = text;
+
+    var div = document.createElement('div');
+    div.className = "text-center";
+    div.textContent = text;
+
+    message.appendChild(div);
 }
 
 function dialogShowMatrix(text, matrix) {
@@ -569,7 +574,7 @@ document.getElementById('dijkstraAlgorithmId').addEventListener('click', functio
                 if (responseData.exception == "") {
 
                     
-                    showMessage("");
+                    showMessage("Алгоритм Дейкстри");
                     var message = document.getElementById('message');
                     for (var i = 0; i < responseData.matrix.length; i++) {
                         var path = responseData.matrix[i].Path;
