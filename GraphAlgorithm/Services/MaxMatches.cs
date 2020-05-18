@@ -33,7 +33,7 @@ namespace GraphAlgorithm.Services
 
             List<int> matching = new List<int>();
 
-            matching.FillInt(-1, rightPart+ leftPart);
+            matching.FillInt(-1, rightPart + leftPart);
 
             foreach (int ui in u)
                 FindPath(ui, matrix, matching, new List<bool>().FillBool(false, leftPart));
@@ -67,9 +67,9 @@ namespace GraphAlgorithm.Services
 
                 for (int j = 0; j < matrix[i].Count; j++)
                 {
-                    if (matrix[i][j] > 1 && matrix[i][j] < 0)
+                    if (matrix[i][j] != 1 && matrix[i][j] != 0)
                     {
-                        throw new MethodException("Матриця має некоректні дані.");
+                        throw new MethodException("Матриця повинна складатися тільки з 0 або 1.");
                     }
                 }
             }
