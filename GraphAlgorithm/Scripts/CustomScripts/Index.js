@@ -15,7 +15,7 @@ let cy = cytoscape({
             style: {
                 'background-color': '#69e',
                 'text-valign': 'center',
-                'label': 'data(id)',
+                'label': 'data(label)',
             }
         },
 
@@ -84,7 +84,7 @@ window.onload = function () {
         cy.on('tap', function (evt) {
             amountOfNode++;
             cy.add({
-                group: 'nodes', data: { id: 'n' + amountOfNode },
+                group: 'nodes', data: { id: 'n' + amountOfNode, label: 'n' + amountOfNode},
                 renderedPosition: { x: evt.renderedPosition.x, y: evt.renderedPosition.y }
             });
         });
@@ -126,23 +126,72 @@ window.onload = function () {
             }
         });
     });
+
+    $("#renameNodeBtn").on('click', function (evt) {
+        supplayFunc("renameNodeBtn");
+        showMessage("Виберіть вершину для перейменування.");
+
+        cy.on('tap', 'node', function (evt) {
+            var node = evt.target;
+            if (node == cy) return;
+            $('#renameDialog').modal();
+            var input = document.getElementById('newNodeName');
+            var idNode = document.getElementById('idNodeName');
+            input.value = node.id('data');
+            idNode.value = node.id('data');
+        });
+    });
+}
+
+function rename() {
+    var newName = document.getElementById('newNodeName');
+    var idNode = document.getElementById('idNodeName');
+    var tmp = '#' + idNode.value;
+    cy.$(tmp).data('label', newName.value);
 }
 
 function addEdges() {
-    amountOfEdge++;
+    var alertElement = document.getElementById('alertEmptyFields');
     var val = document.getElementById('valueOfEdge').value;
-    if (val == '' && isWeightedGraph) return;
+    if (document.getElementById('secondSelected').value == '' ||
+        document.getElementById('firstSelected').value == '') {
+        alertElement.style = "";
+        return;
+    }
+
+    if (val == '' && isWeightedGraph) {
+        alertElement.style = "";
+        return;
+    }
+    
+    var alertElement = document.getElementById('alertEmptyFields');
+
     if (val == '') val = 1;
+    amountOfEdge++;
+
+    var source = document.getElementById('firstSelected').value;
+    var target = document.getElementById('secondSelected').value;
+
+    for (var edge of cy.edges()) {
+        if (edge.data('source') == source && edge.data('target') == target) {
+            edge.data('weight', val);
+            $('#connectDialog').modal('toggle');
+            alertElement.style = "display:none";
+            return;
+        }
+    }
 
     cy.add({
         group: 'edges', data: {
             id: 'e' + amountOfEdge,
-            source: document.getElementById('firstSelected').value,
-            target: document.getElementById('secondSelected').value,
+            source: source,
+            target: target,
             directed: isOrientedGraph,
             weight: val
         }
     });
+    $('#connectDialog').modal('toggle');
+    alertElement.style = "display:none";
 }
 
 function isOriented(matrix) {

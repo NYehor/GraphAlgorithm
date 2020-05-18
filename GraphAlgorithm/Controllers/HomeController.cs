@@ -11,7 +11,7 @@ namespace GraphAlgorithm.Controllers
 {
     public class HomeController : Controller
     {
-        [HttpPost]
+        [HttpGet]
         public ActionResult SetMatrix(IndexViewModel indexViewModel = null)
         {
             return View("Index", indexViewModel);

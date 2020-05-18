@@ -40,13 +40,13 @@ function convertToElements(matrix) {
 
     for (var i = 0; i < matrix.length; i++) {
 
-        elements.push({ group: 'nodes', data: { id: 'n' + (i+1) } });
+        elements.push({ group: 'nodes', data: { id: 'n' + (i + 1), label: 'n' + (i + 1)} });
     }
 
     var state = isDirection(matrix);
     var index = 0;
     for (var i = 0; i < matrix.length; i++) {
-        for (var j = 0; j < i; j++) {
+        for (var j = 0; j <= i; j++) {
             if (matrix[i][j] != 0) {
                 elements.push({
                     group: 'edges',
