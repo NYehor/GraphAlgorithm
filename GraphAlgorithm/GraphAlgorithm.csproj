@@ -155,6 +155,7 @@
     <Content Include="Content\Images\FloydWarshallResultMatrixExample.png" />
     <Content Include="Content\Images\IncMatrix.jpg" />
     <Content Include="Content\Images\IncMatrixWindow.jpg" />
+    <Content Include="Content\Images\InputMatrix.jpg" />
     <Content Include="Content\Images\Menu.jpg" />
     <Content Include="Content\Images\MenuMatrix.jpg" />
     <Content Include="Content\Images\Methods.jpg" />
