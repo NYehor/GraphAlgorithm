@@ -149,9 +149,13 @@
     <Content Include="Content\Home.css" />
     <Content Include="Content\Images\AddNodes.jpg" />
     <Content Include="Content\Images\AdjMatrix.jpg" />
+    <Content Include="Content\Images\AdjMatrixWindow.jpg" />
     <Content Include="Content\Images\ConnectNodes.jpg" />
     <Content Include="Content\Images\DisorientedGraph.jpg" />
     <Content Include="Content\Images\FloydWarshallResultMatrixExample.png" />
+    <Content Include="Content\Images\IncMatrix.jpg" />
+    <Content Include="Content\Images\IncMatrixWindow.jpg" />
+    <Content Include="Content\Images\InputMatrix.jpg" />
     <Content Include="Content\Images\Menu.jpg" />
     <Content Include="Content\Images\MenuMatrix.jpg" />
     <Content Include="Content\Images\Methods.jpg" />
@@ -312,6 +316,8 @@
     <Content Include="Views\Home\Wiki\MovingVertices.cshtml" />
     <Content Include="Views\Home\Wiki\AlgorithmSelection.cshtml" />
     <Content Include="Views\Home\Wiki\AdjacencyMatrixWiki.cshtml" />
+    <Content Include="Views\Home\Wiki\AddAdjMatrix.cshtml" />
+    <Content Include="Views\Home\Wiki\AddIncMatrix.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

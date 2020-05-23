@@ -11,7 +11,7 @@ namespace GraphAlgorithm.Controllers
 {
     public class HomeController : Controller
     {
-        [HttpPost]
+        [HttpGet]
         public ActionResult SetMatrix(IndexViewModel indexViewModel = null)
         {
             return View("Index", indexViewModel);
@@ -59,6 +59,16 @@ namespace GraphAlgorithm.Controllers
         {
             return View("Wiki/Graph");
         }
+
+        public ActionResult AddIncMatrix()
+        {
+            return View("Wiki/AddIncMatrix");
+        }
+
+        public ActionResult AddAdjMatrix()
+        {
+            return View("Wiki/AddAdjMatrix");
+        }
         public ActionResult Kruskal()
         {
             return View("Algorithms/Kruskal");
@@ -98,6 +108,7 @@ namespace GraphAlgorithm.Controllers
         {
             return View("Algorithms/WideSearchTree");
         }
+
 
         [HttpGet]
         public JsonResult KruskalAlgorithm(string data)

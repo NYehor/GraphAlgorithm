@@ -5,6 +5,7 @@
 
 <div>
     <br>
+    <br>
     <h2>Створення та редагування графа</h2>
     <ol>
         <li>
@@ -16,17 +17,17 @@
         <li>
             @Html.ActionLink("Додавання дуг", "AddEdges", "Home")
         </li>
-        <li>
+        @*<li>
             @Html.ActionLink("Вибір алгоритму", "AlgorithmSelection", "Home")
         </li>
         <li>
             @Html.ActionLink("Переміщення вершин", "MovingVertices", "Home")
+        </li>*@
+        <li>
+            @Html.ActionLink("Побудова графа по матриці суміжності", "AddAdjMatrix", "Home")
         </li>
         <li>
-            @Html.ActionLink("Побудова графа по матриці суміжності", "Graph", "Home")
-        </li>
-        <li>
-            @Html.ActionLink("Побудова графа по матриці інцидентності", "Graph", "Home")
+            @Html.ActionLink("Побудова графа по матриці інцидентності", "AddIncMatrix", "Home")
         </li>
     </ol>
 
