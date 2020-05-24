@@ -1,6 +1,7 @@
 ﻿var amountOfNode = 0;
 var amountOfEdge = 0;
 var isOrientedGraph = true;
+var isWeightedGraph = false;
 
 let cy = cytoscape({
 
@@ -14,7 +15,7 @@ let cy = cytoscape({
             style: {
                 'background-color': '#69e',
                 'text-valign': 'center',
-                'label': 'data(id)',
+                'label': 'data(label)',
             }
         },
 
@@ -26,7 +27,7 @@ let cy = cytoscape({
                 'curve-style': 'bezier',
                 'target-arrow-color': '#369',
                 'target-arrow-shape': 'triangle',
-                'label': 'data(label)',
+                'label': '',
                 'font-size': '14px',
                 'color': '#777'
             }
@@ -83,7 +84,7 @@ window.onload = function () {
         cy.on('tap', function (evt) {
             amountOfNode++;
             cy.add({
-                group: 'nodes', data: { id: 'n' + amountOfNode },
+                group: 'nodes', data: { id: 'n' + amountOfNode, label: 'n' + amountOfNode},
                 renderedPosition: { x: evt.renderedPosition.x, y: evt.renderedPosition.y }
             });
         });
@@ -98,7 +99,13 @@ window.onload = function () {
         message.textContent = "Виділіть першу вершину для створення дуги";
 
         cy.on('tap', 'node', function (evt) {
-            $('#connectDialog').modal();
+
+            if (!isWeightedGraph)
+                document.getElementById('weightInput').style = "display:none";
+            else
+                document.getElementById('weightInput').style = "";
+
+            $('#connectDialog').modal()
 
             var selectedId = evt.target.data('id');
             document.getElementById('firstSelected').value = selectedId;
@@ -119,23 +126,72 @@ window.onload = function () {
             }
         });
     });
+
+    $("#renameNodeBtn").on('click', function (evt) {
+        supplayFunc("renameNodeBtn");
+        showMessage("Виберіть вершину для перейменування.");
+
+        cy.on('tap', 'node', function (evt) {
+            var node = evt.target;
+            if (node == cy) return;
+            $('#renameDialog').modal();
+            var input = document.getElementById('newNodeName');
+            var idNode = document.getElementById('idNodeName');
+            input.value = node.id('data');
+            idNode.value = node.id('data');
+        });
+    });
+}
+
+function rename() {
+    var newName = document.getElementById('newNodeName');
+    var idNode = document.getElementById('idNodeName');
+    var tmp = '#' + idNode.value;
+    cy.$(tmp).data('label', newName.value);
 }
 
 function addEdges() {
-    amountOfEdge++;
+    var alertElement = document.getElementById('alertEmptyFields');
     var val = document.getElementById('valueOfEdge').value;
-    if (val == '')
-        val = '1';
+    if (document.getElementById('secondSelected').value == '' ||
+        document.getElementById('firstSelected').value == '') {
+        alertElement.style = "";
+        return;
+    }
+
+    if (val == '' && isWeightedGraph) {
+        alertElement.style = "";
+        return;
+    }
+    
+    var alertElement = document.getElementById('alertEmptyFields');
+
+    if (val == '') val = 1;
+    amountOfEdge++;
+
+    var source = document.getElementById('firstSelected').value;
+    var target = document.getElementById('secondSelected').value;
+
+    for (var edge of cy.edges()) {
+        if (edge.data('source') == source && edge.data('target') == target) {
+            edge.data('weight', val);
+            $('#connectDialog').modal('toggle');
+            alertElement.style = "display:none";
+            return;
+        }
+    }
 
     cy.add({
         group: 'edges', data: {
             id: 'e' + amountOfEdge,
-            source: document.getElementById('firstSelected').value,
-            target: document.getElementById('secondSelected').value,
+            source: source,
+            target: target,
             directed: isOrientedGraph,
-            label: val,
+            weight: val
         }
     });
+    $('#connectDialog').modal('toggle');
+    alertElement.style = "display:none";
 }
 
 function isOriented(matrix) {
@@ -152,15 +208,37 @@ function isOriented(matrix) {
     return flag
 }
 
+function isWeighted(matrix) {
+    var flag = false;
+
+    for (var i = 0; i < matrix.length; i++)
+        for (var j = 0; j < matrix.length; j++) {
+            if (matrix[i][j] != 1)
+                if (matrix[i][j] != 0) {
+                    flag = true;
+                    return flag;
+                }
+        }
+
+    return flag
+}
+
 function loadNewGraph(matrix, adjacency) {
 
+    document.getElementById('defaultBtn').click();
     if (!adjacency)
         matrix = incidenceToAdjacency(matrix);
 
     if (isOriented(matrix))
-        createOrientedGraph();
+        if (isWeighted(matrix))
+            createOrientedWeightedGraph();
+        else
+            createDisorientedUnweightedGraph();
     else
-        createDisorientedGraph();
+        if (isWeighted(matrix))
+            createDisorientedWeightedGraph();
+        else
+            createDisorientedUnweightedGraph();
 
     cy.add(convertToElements(matrix));
 
@@ -203,7 +281,7 @@ function getAdjacencyMatrix() {
         var source = cy.edges()[i].data('source');
         var target = cy.edges()[i].data('target');
 
-        matrix[dict[source]][dict[target]] = parseInt(cy.elements().edges()[i].data('label'));
+        matrix[dict[source]][dict[target]] = parseInt(cy.elements().edges()[i].data('weight'));
     }
 
     var condition = cy.edges()[0].data('directed');
@@ -283,23 +361,54 @@ function incidenceSaveChanges() {
     loadNewGraph(matrix, false)
 }
 
-function createOrientedGraph() {
+function createOrientedUnweightedGraph() {
     removeElement();
     isOrientedGraph = true;
+    isWeightedGraph = false;
 
     cy.style().selector('edge')
         .style({
             'target-arrow-color': '#369',
             'target-arrow-shape': 'triangle',
+            'label': '',
         }).update();
 }
 
-function createDisorientedGraph() {
+function createDisorientedUnweightedGraph() {
     removeElement();
     isOrientedGraph = false;
+    isWeightedGraph = false;
 
     cy.style().selector('edge')
-        .style('target-arrow-shape', 'none').update();
+        .style({
+            'target-arrow-shape': 'none',
+            'label': '',
+        }).update();
+}
+
+function createOrientedWeightedGraph() {
+    removeElement();
+    isOrientedGraph = true;
+    isWeightedGraph = true;
+
+    cy.style().selector('edge')
+        .style({
+            'target-arrow-color': '#369',
+            'target-arrow-shape': 'triangle',
+            'label': 'data(weight)',
+        }).update();
+}
+
+function createDisorientedWeightedGraph() {
+    removeElement();
+    isOrientedGraph = false;
+    isWeightedGraph = true;
+
+    cy.style().selector('edge')
+        .style({
+            'target-arrow-shape': 'none',
+            'label': 'data(weight)',
+        }).update();
 }
 
 function toStr(matrix) {
@@ -342,7 +451,12 @@ function showMessage(text) {
     var message = document.getElementById('message');
     while (message.firstChild)
         message.removeChild(message.firstChild);
-    message.textContent = text;
+
+    var div = document.createElement('div');
+    div.className = "text-center";
+    div.textContent = text;
+
+    message.appendChild(div);
 }
 
 function dialogShowMatrix(text, matrix) {
@@ -353,6 +467,9 @@ function dialogShowMatrix(text, matrix) {
     while (message.firstChild)
         message.removeChild(message.firstChild);
 
+    var div = document.createElement('div');
+    div.className = "text-center";
+    div.textContent = text;
     var button = document.createElement('button');
     button.type = "button";
     button.className = "btn btn-primary";
@@ -362,8 +479,9 @@ function dialogShowMatrix(text, matrix) {
         $('#dialogModalShowMatrix').modal();
         document.getElementById('textMatrix').value = str;
     })
-    message.textContent = text;
-    message.appendChild(button);
+    div.appendChild(button);
+    message.appendChild(div);
+    message.appendChild(document.createElement('br'));
 }
 
 document.getElementById('kruskalAlgorithmId').addEventListener('click', function () {
@@ -375,7 +493,7 @@ document.getElementById('kruskalAlgorithmId').addEventListener('click', function
         $.get('/Home/KruskalAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                var message = "Мінімальна вага: " + data.minimalCost;
+                var message = "Алгоритм Крускала. Мінімальна вага: " + data.minimalCost;
                 dialogShowMatrix(message, data.matrix);
             }
             else
@@ -393,7 +511,7 @@ document.getElementById('primAlgorithmId').addEventListener('click', function ()
         $.get('/Home/PrimAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                var message = "Мінімальна вага: " + data.minimalCost;
+                var message = "Алгоритм Прима. Мінімальна вага: " + data.minimalCost;
                 dialogShowMatrix(message, data.matrix);
             }
             else
@@ -430,13 +548,8 @@ document.getElementById('floydWarshallSecondAlgorithmId').addEventListener('clic
 
     if (graphMatrix.length > 0) {
 
-        $.get('/Home/FloydWarshallSecondAlgorithm', $.param({ data: matrix }, true), function (data) {
-
-            if (data.exception == "") {
-                dialogShowMatrix("", data.matrix);
-            }
-            else
-                showMessage(data.exception);
+        $.get('/Home/FloydWarshallSecondAlgorithm', $.param({ data: matrix }, true), function(data) {
+            floydWarshallAlgCallback("Алгоритм Флойда — Воршелла (II)", data);
         });
     }
 })
@@ -448,15 +561,37 @@ document.getElementById('floydWarshallFirstAlgorithmId').addEventListener('click
     if (graphMatrix.length > 0) {
 
         $.get('/Home/FloydWarshallFirstAlgorithm', $.param({ data: matrix }, true), function (data) {
-
-            if (data.exception == "") {
-                dialogShowMatrix("", data.matrix);
-            }
-            else
-                showMessage(data.exception);
+            floydWarshallAlgCallback("Алгоритм Флойда — Воршелла (I)", data);
         });
     }
-})
+});
+
+function floydWarshallAlgCallback(methodName, data) {
+
+    if (data.exception == "") {
+        showMessage("");
+        dialogShowMatrix(methodName, data.matrix);
+        createMatrixExplanation(data.matrix);
+    }
+    else
+        showMessage(data.exception);
+
+    function createMatrixExplanation(matrix) {
+        for (let i = 0; i < matrix.length; i++) {
+            for (let j = 0; j < matrix.length; j++) {
+                if (matrix[i][j] != 0) {
+                    var message = document.getElementById('message');
+
+                    var div = document.createElement('div');
+                    div.textContent = `Довжина шляху з вершини n${i + 1} у вершину n${j + 1}: ${matrix[i][j]}`;
+                    div.style = "float:left";
+                    message.appendChild(div);
+                    message.appendChild(document.createElement('br'));
+                }
+            }
+        }
+    }
+}
 
 document.getElementById('maxMatchesAlgorithmId').addEventListener('click', function () {
     var graphMatrix = getAdjacencyMatrix();
@@ -469,6 +604,7 @@ document.getElementById('maxMatchesAlgorithmId').addEventListener('click', funct
             if (data.exception == "") {
                 var message = "Максимальна кільскість паросполучень = " + data.countMatches;
                 dialogShowMatrix(message, data.matrix);
+
             }
             else
                 showMessage(data.exception);
@@ -484,24 +620,29 @@ document.getElementById('dijkstraAlgorithmId').addEventListener('click', functio
 
         var func = function (id) {
             id++;
-            $.get('/Home/DijkstraAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
+            $.get('/Home/DijkstraAlgorithm', $.param({ data: matrix, start: id }, true), function (responseData) {
 
-                if (data.exception == "") {
+                if (responseData.exception == "") {
 
-                    var str = '';
-                    for (var i = 0; i < data.matrix.length; i++) {
-                        var path = data.matrix[i].Path;
+                    
+                    showMessage("Алгоритм Дейкстри");
+                    var message = document.getElementById('message');
+                    for (var i = 0; i < responseData.matrix.length; i++) {
+                        var path = responseData.matrix[i].Path;
                         var stringPath = '[ ';
                         for (var j = 0; j < path.length; j++) {
-                            stringPath += path[j];
+                            stringPath += cy.nodes()[path[j] - 1].data('id');
                             stringPath += j < path.length - 1 ? ", " : " ]";
                         }
-                        var index = data.matrix[i].VerticeNumber;
+                        var index = responseData.matrix[i].VerticeNumber;
                         var vertex = cy.nodes()[index - 1].data('id');
-                        str += "Вершина: " + vertex + " - Длина: " + data.matrix[i].PathLength + "- Путь: " + stringPath;
-                    }
 
-                    showMessage(str);
+                        var div = document.createElement('div');
+                        div.textContent = "Вершина: " + vertex + " - Длина: " + responseData.matrix[i].PathLength + " - Путь: " + stringPath;
+                        div.style = "float:left";
+                        message.appendChild(div);
+                        message.appendChild(document.createElement('br'));
+                    }
                 }
                 else
                     showMessage(data.exception);
@@ -522,7 +663,11 @@ document.getElementById('wideSearchTreeAlgorithmId').addEventListener('click', f
             $.get('/Home/WideSearchTreeAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
 
                 if (data.exception == "") {
-                    showMessage(data.matrix);
+                    var message = "Порядок обходу: ";
+                    for (var i = 0; i < data.matrix.length - 1; i++)
+                        message += cy.nodes()[data.matrix[i]].data('id') + '->';
+                    message += cy.nodes()[data.matrix[data.matrix.length - 1]].data('id');
+                    showMessage(message);
                 }
                 else
                     showMessage(data.exception);
@@ -542,7 +687,11 @@ document.getElementById('deepSearchTreeAlgorithmId').addEventListener('click', f
         var func = function (id) {
             $.get('/Home/DeepSearchTreeAlgorithm', $.param({ data: matrix, start: id }, true), function (data) {
                 if (data.exception == "") {
-                    showMessage(data.matrix);
+                    var message = "Порядок обходу: ";              
+                    for (var i = 0; i < data.matrix.length - 1; i++)
+                        message += cy.nodes()[data.matrix[i]].data('id') + '->';
+                    message += cy.nodes()[data.matrix[data.matrix.length - 1]].data('id');
+                    showMessage(message);
                 }
                 else
                     showMessage(data.exception);

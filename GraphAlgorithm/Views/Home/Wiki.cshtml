@@ -3,8 +3,34 @@
     ViewBag.Title = "Довідка";
 }
 
-<div> 
+<div>
     <br>
+    <br>
+    <h2>Створення та редагування графа</h2>
+    <ol>
+        <li>
+            @Html.ActionLink("Граф", "Graph", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Додавання вершин", "AddVertices", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Додавання дуг", "AddEdges", "Home")
+        </li>
+        @*<li>
+            @Html.ActionLink("Вибір алгоритму", "AlgorithmSelection", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Переміщення вершин", "MovingVertices", "Home")
+        </li>*@
+        <li>
+            @Html.ActionLink("Побудова графа по матриці суміжності", "AddAdjMatrix", "Home")
+        </li>
+        <li>
+            @Html.ActionLink("Побудова графа по матриці інцидентності", "AddIncMatrix", "Home")
+        </li>
+    </ol>
+
     <h2>Алгоритми</h2>
     <ol>
         <li>
@@ -20,7 +46,7 @@
             @Html.ActionLink("Алгоритм Дейкстри", "Dijkstra", "Home")
         </li>
         <li>
-            @Html.ActionLink("Алгоритм Флойда — Воршелла", "FloydWarshallSecond", "Home")
+            @Html.ActionLink("Алгоритм Флойда — Воршелла", "FloydWarshall", "Home")
         </li>
         <li>
             @Html.ActionLink("Паросполучення", "MaxMatches", "Home")

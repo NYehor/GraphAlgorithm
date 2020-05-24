@@ -1,15 +1,13 @@
 ﻿@model GraphAlgorithm.Models.IndexViewModel
 
 @{
-    ViewBag.Title = "Головна сотрінка";
+    ViewBag.Title = "Головна сторінка";
 }
 
 @Scripts.Render("~/bundles/Scripts")
 
 <link rel="stylesheet" href="~/Content/Home.css">
-<p>
-
-</p>
+<br>
 <section>
     <ul class="nav nav-pills">
         <li class="dropdown">
@@ -17,38 +15,25 @@
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Граф
             </button>
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
-                <li class="dropdown-item" style="width:inherit">
-                    <label data-toggle="modal" onclick="createOrientedGraph()" style="width:inherit">Створити орієнтований граф</label>
-                </li>
-                <li class="dropdown-item" style="width:inherit">
-                    <label data-toggle="modal" onclick="createDisorientedGraph()" style="width:inherit">Створити неорієнтований граф</label>
-                </li>
-                <li class="dropdown-divider"></li>
-
-                <li id="tmpLi" class="dropdown-item">
-                    <label for="openFileBtn" style="width:inherit" accept=".txt">Відкрити</label>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <button class="dropdown-item" onclick="createOrientedUnweightedGraph()">Створити орієнтований незважений граф</button>
+                <button class="dropdown-item" onclick="createDisorientedUnweightedGraph()">Створити неорієнтований незважений граф</button>
+                <button class="dropdown-item" onclick="createOrientedWeightedGraph()">Створити орієнтований зважений граф</button>
+                <button class="dropdown-item" onclick="createDisorientedWeightedGraph()">Створити неорієнтований зважений граф</button>
+                <div class="dropdown-divider"></div>
+                <button id="tmpLi" class="dropdown-item">
+                    <label type="button" for="openFileBtn" style="width:inherit" accept=".txt">Відкрити</label>
                     <input id="openFileBtn" onclick="this.value=null;" style="display:none;" type="file">
-                </li>
-
-                <li class="dropdown-item">
-                    <label data-toggle="modal" data-target="#saveDialog" style="width:inherit">Зберегти</label>
-                </li>
-                <li class="dropdown-divider"></li>
-                <li class="dropdown-item">
-                    <label onclick="showAdjacency()" style="width:inherit">Матриця суміжності</label>
-                </li>
-                <li class="dropdown-item">
-                    <label onclick="showIncidence()" style="width:inherit">Матриця інцидентності</label>
-                </li>
-                <li class="dropdown-divider"></li>
-                <li class="dropdown-item">
-                    <label onclick="removeElement()" style="width:inherit">Видалити</label>
-                </li>
-            </ul>
+                </button>
+                <button class="dropdown-item" data-toggle="modal" data-target="#saveDialog" style="width:inherit">Зберегти</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" onclick="showAdjacency()" style="width:inherit">Матриця суміжності</button>
+                <button class="dropdown-item" onclick="showIncidence()" style="width:inherit">Матриця інцидентності</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item" onclick="removeElement()" style="width:inherit">Видалити</button>
+            </div>
         </li>
-        <li type="button" class="btn btn-secondary margin-right" id="defaultBtn">За замовчуванням</li>
+        <li type="button" class="btn btn-secondary margin-right" id="defaultBtn">Пересунути</li>
         <li type="button" class="btn btn-primary margin-right" id="addBtn">Додати</li>
 
         <li type="button" class="btn btn-primary margin-right" id="connectBtn">З'єднати</li>
@@ -59,20 +44,20 @@
                 Алгоритми
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <label id="kruskalAlgorithmId" class="dropdown-item">Алгоритм Крускала</label>
-                <label id="primAlgorithmId" class="dropdown-item">Алгоритм Прима</label>
+                <button id="kruskalAlgorithmId" class="dropdown-item">Алгоритм Крускала</button>
+                <button id="primAlgorithmId" class="dropdown-item">Алгоритм Прима</button>
                 <div class="dropdown-divider"></div>
-                <label id="hamiltonianCycleAlgorithmId" class="dropdown-item">Пошук Гамільтонового циклу</label>
-                <label id="dijkstraAlgorithmId" class="dropdown-item">Алгоритм Дейкстри</label>
-                <label id="floydWarshallFirstAlgorithmId" class="dropdown-item">Алгоритм Флойда — Воршелла (I)</label>
-                <label id="floydWarshallSecondAlgorithmId" class="dropdown-item">Алгоритм Флойда — Воршелла (II)</label>
-                <label id="maxMatchesAlgorithmId" class="dropdown-item">Паросполучення</label>
+                <button id="hamiltonianCycleAlgorithmId" class="dropdown-item">Пошук Гамільтонового циклу</button>
+                <button id="dijkstraAlgorithmId" class="dropdown-item">Алгоритм Дейкстри</button>
+                <button id="floydWarshallFirstAlgorithmId" class="dropdown-item">Алгоритм Флойда — Воршелла (I)</button>
+                <button id="floydWarshallSecondAlgorithmId" class="dropdown-item">Алгоритм Флойда — Воршелла (II)</button>
+                <button id="maxMatchesAlgorithmId" class="dropdown-item">Паросполучення</button>
                 <div class="dropdown-divider"></div>
-                <label id="wideSearchTreeAlgorithmId" class="dropdown-item">Пошук у ширину</label>
-                <label id="deepSearchTreeAlgorithmId" class="dropdown-item">Пошук у глибину</label>
+                <button id="wideSearchTreeAlgorithmId" class="dropdown-item">Пошук у ширину</button>
+                <button id="deepSearchTreeAlgorithmId" class="dropdown-item">Пошук у глибину</button>
             </div>
         </li>
-
+        @*<li type="button" class="btn btn-primary margin-right" id="renameNodeBtn"> Перейменувати вершину </li>*@
         <li type="button" class="btn btn-primary margin-right" id="deleteBtn">Видалити</li>
 
     </ul>
@@ -87,7 +72,7 @@
     </div>
 </section>
 
-<div id="cy"></div>
+<div id="cy" class="form-control"></div>
 
 <script>
     function findDimensions() {
@@ -162,11 +147,17 @@
                 <datalist id="browsers">
                 </datalist>
             </div>
-            <div class="modal-body text-center">
-                Вага: <input id="valueOfEdge" value="0">
+            <div  class="modal-body text-center">
+                <div id="weightInput" style="display:none">
+                    Вага: <input type="number" id="valueOfEdge">
+                </div>
+                <br>
+                <div id="alertEmptyFields" class="alert alert-danger" style="display:none">
+                    Заповніть всі поля будь ласка!
+                </div>
             </div>
             <div class="modal-footer text-md-center">
-                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="addEdges()">Створити</button>
+                <button type="button" class="btn btn-primary" onclick="addEdges()">Створити</button>
             </div>
         </div>
     </div>
@@ -245,6 +236,26 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрити</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="renameDialog" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">Перейменування</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Закрити">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <input type="text" id="idNodeName" style="display:none">
+                Нове ім'я:  <input type="text" id="newNodeName">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="rename()" data-dismiss="modal">Зберегти</button>
             </div>
         </div>
     </div>

@@ -29,7 +29,7 @@ namespace GraphAlgorithm.Services
             _adjacencyMatrix = adjacencyMatrix;
             _isVisitedVertexes = Enumerable.Repeat(false, _n).ToList();
             _path = new List<int>();
-            if (CheckConnectivity())
+            if (CheckConnectivity() && CheckForAtLeastOneIncomingArc() && CheckForAtLeastOneOutgoingArc())
             {
                 _isVisitedVertexes = Enumerable.Repeat(false, _n).ToList();
                 FindHamiltonianCycle(0);
@@ -78,11 +78,11 @@ namespace GraphAlgorithm.Services
             return false;
         }
 
-        private bool CheckConnectivity()
+        private bool CheckConnectivity(int index)
         {
-            bool result;
             int nComp = 0;
-            for (int curVertex = 0; curVertex < _n; curVertex++)
+            _isVisitedVertexes = Enumerable.Repeat(false, _n).ToList();
+            for (int curVertex = index; curVertex < _n; curVertex++)
             {
                 if (!_isVisitedVertexes[curVertex])
                 {
@@ -91,7 +91,30 @@ namespace GraphAlgorithm.Services
                 }
             }
 
-            result = nComp == 1;
+            for (int curVertex = 0; curVertex < index; curVertex++)
+            {
+                if (!_isVisitedVertexes[curVertex])
+                {
+                    nComp++;
+                    dfs(curVertex);
+                }
+            }        
+
+            return nComp == 1;
+        }
+
+        private bool CheckConnectivity()
+        {
+            bool result = true;
+
+            for (int curVertex = 0; curVertex < _n; curVertex++)
+            {
+                if (!CheckConnectivity(curVertex))
+                {
+                    result = false;
+                    break;
+                }
+            }
 
             if (!result)
             {
@@ -111,6 +134,63 @@ namespace GraphAlgorithm.Services
                     dfs(nextVertex);
                 }
             }
+        }
+
+        private bool CheckForAtLeastOneOutgoingArc()
+        {
+            bool noOutArc = true;
+            for (int i = 0; i < _n; i++)
+            {
+                noOutArc = true;
+                for (int j = 0; j < _n; j++)
+                {
+                    if (_adjacencyMatrix[i][j] < INF)
+                    {
+                        noOutArc = false;
+                        break;
+                    }
+                }
+                if (noOutArc)
+                {
+                    break;
+                }
+            }
+
+            if (noOutArc)
+            {
+                _failureReason = "В графі існує вершина, яка не має жодної вихідної дуги.";
+            }
+
+            return !noOutArc;
+        }
+
+        private bool CheckForAtLeastOneIncomingArc()
+        {
+            bool noInArc = true;
+            for (int i = 0; i < _n; i++)
+            {
+                noInArc = true;
+                for (int j = 0; j < _n; j++)
+                {
+                    if (_adjacencyMatrix[j][i] < INF)
+                    {
+                        noInArc = false;
+                        break;
+                    }
+                }
+
+                if (noInArc)
+                {
+                    break;
+                }
+            }
+
+            if (noInArc)
+            {
+                _failureReason = "В графі існує вершина, яка не має жодної вхідної дуги.";
+            }
+
+            return !noInArc;
         }
 
         private List<List<double>> ConvertPathToAdjacencyMatrix()

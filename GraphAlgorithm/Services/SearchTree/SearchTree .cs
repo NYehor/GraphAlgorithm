@@ -17,7 +17,11 @@ namespace GraphAlgorithm.Services.SearchTree
             ConvertMatrixToNodes(matrix);
             if (startNodeId < 0 && startNodeId >= nodes.Count)
             {
-                throw new ArgumentOutOfRangeException("Node id out of range.");
+                throw new MethodException("Індекс вершини за межами графа " + startNodeId);
+            }
+            if (nodes[startNodeId].Nodes.Count == 0)
+            {
+                throw new MethodException("Початково задана вершина графа ізольована " + startNodeId);
             }
 
             SetNodesStatusToNew();
@@ -50,7 +54,11 @@ namespace GraphAlgorithm.Services.SearchTree
             ConvertMatrixToNodes(matrix);
             if (startNodeId < 0 && startNodeId >= nodes.Count)
             {
-                throw new ArgumentOutOfRangeException("Node id out of range.");
+                throw new MethodException("Індекс вершини за межами графа " + startNodeId);
+            }
+            if (nodes[startNodeId].Nodes.Count == 0)
+            {
+                throw new MethodException("Початково задана вершина графа ізольована " + startNodeId);
             }
 
             SetNodesStatusToNew();
@@ -90,7 +98,7 @@ namespace GraphAlgorithm.Services.SearchTree
         {
             if (matrix.GetLength(0) != matrix.GetLength(1))
             {
-                throw new ArgumentException("Incorrect matrix");
+                throw new MethodException("Матриця не валідна");
             }
             int lenght = matrix.GetLength(0);
 

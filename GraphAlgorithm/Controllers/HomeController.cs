@@ -11,7 +11,7 @@ namespace GraphAlgorithm.Controllers
 {
     public class HomeController : Controller
     {
-        [HttpPost]
+        [HttpGet]
         public ActionResult SetMatrix(IndexViewModel indexViewModel = null)
         {
             return View("Index", indexViewModel);
@@ -35,7 +35,40 @@ namespace GraphAlgorithm.Controllers
         {
             return View();
         }
+        public ActionResult AddVertices()
+        {
+            return View("Wiki/AddVertices");
+        }
 
+        public ActionResult AddEdges()
+        {
+            return View("Wiki/AddEdges");
+        }
+
+        public ActionResult AlgorithmSelection()
+        {
+            return View("Wiki/AlgorithmSelection");
+        }
+
+        public ActionResult MovingVertices()
+        {
+            return View("Wiki/MovingVertices");
+        }
+
+        public ActionResult Graph()
+        {
+            return View("Wiki/Graph");
+        }
+
+        public ActionResult AddIncMatrix()
+        {
+            return View("Wiki/AddIncMatrix");
+        }
+
+        public ActionResult AddAdjMatrix()
+        {
+            return View("Wiki/AddAdjMatrix");
+        }
         public ActionResult Kruskal()
         {
             return View("Algorithms/Kruskal");
@@ -61,9 +94,9 @@ namespace GraphAlgorithm.Controllers
             return View("Algorithms/MaxMatches");
         }
 
-        public ActionResult FloydWarshallSecond()
+        public ActionResult FloydWarshall()
         {
-            return View("Algorithms/FloydWarshallSecond");
+            return View("Algorithms/FloydWarshall");
         }
 
         public ActionResult Dijkstra()
@@ -75,6 +108,7 @@ namespace GraphAlgorithm.Controllers
         {
             return View("Algorithms/WideSearchTree");
         }
+
 
         [HttpGet]
         public JsonResult KruskalAlgorithm(string data)
@@ -88,6 +122,11 @@ namespace GraphAlgorithm.Controllers
                 if (matrix == null || !IsSymmetricMatrix(matrix))
                 {
                     throw new MethodException("Матриця не валiдна або задано орiєнтовний граф. Даний алгоритм може працювати лише iз неорiєнтовними графами");
+                }
+
+                if (!IsConnectivityGraph(matrix))
+                {
+                    throw new MethodException("Граф не є зв'язним");
                 }
 
                 matrix = replaceZeroToInf(matrix);
@@ -127,6 +166,11 @@ namespace GraphAlgorithm.Controllers
                 if (matrix == null || !IsSymmetricMatrix(matrix))
                 {
                     throw new MethodException("Матриця не валiдна або задано орiєнтовний граф. Даний алгоритм може працювати лише iз неорiєнтовними графами");
+                }
+
+                if (!IsConnectivityGraph(matrix))
+                {
+                    throw new MethodException("Граф не є зв'язним");
                 }
 
                 matrix = replaceZeroToInf(matrix);
@@ -198,8 +242,10 @@ namespace GraphAlgorithm.Controllers
 
             try
             {
-                if (matrix == null)
-                    throw new MethodException("TEST EXSEPTION");
+                if (matrix == null || !IsSymmetricMatrix(matrix))
+                {
+                    throw new MethodException("Матриця не валiдна або задано орiєнтовний граф. Даний алгоритм може працювати лише iз неорiєнтовними графами");
+                }
 
                 var method = new FloydWarshallFirtsAlgorithm();
                 var resultMatrix = method.Resolve(matrix);
@@ -228,8 +274,10 @@ namespace GraphAlgorithm.Controllers
 
             try
             {
-                if (matrix == null)
-                    throw new MethodException("TEST EXSEPTION");
+                if (matrix == null || !IsSymmetricMatrix(matrix))
+                {
+                    throw new MethodException("Матриця не валiдна або задано орiєнтовний граф. Даний алгоритм може працювати лише iз неорiєнтовними графами");
+                }
 
                 var method = new FloydWarshallSecondAlgorithm();
                 var resultMatrix = method.Resolve(matrix, false);
@@ -348,8 +396,10 @@ namespace GraphAlgorithm.Controllers
 
             try
             {
-                if (matrix == null)
-                    throw new MethodException("TEST EXSEPTION");
+                if (matrix == null || !IsConnectivityGraph(matrix))
+                {
+                    throw new MethodException("Граф не є зв'язним");
+                }
 
                 matrix = replaceZeroToInf(matrix);
                 var method = new Dijkstra(matrix);
@@ -417,6 +467,30 @@ namespace GraphAlgorithm.Controllers
                     {
                         return false;
                     }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsConnectivityGraph(List<List<double>> matrix)
+        {
+            for (int i = 0; i < matrix[0].Count; i++)
+            {
+                var nodeIsConnected = false;
+
+                for (int j = 0; j < matrix[i].Count; j++)
+                {
+                    if (matrix[i][j] != 0 || matrix[j][i] != 0)
+                    {
+                        nodeIsConnected = true;
+                        break;
+                    }
+                }
+
+                if (!nodeIsConnected)
+                {
+                    return false;
                 }
             }
 
