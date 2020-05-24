@@ -467,7 +467,8 @@ document.getElementById('maxMatchesAlgorithmId').addEventListener('click', funct
         $.get('/Home/MaxMatchesAlgorithm', $.param({ data: matrix }, true), function (data) {
 
             if (data.exception == "") {
-                dialogShowMatrix("", data.matrix);
+                var message = "Максимальна кільскість паросполучень = " + data.countMatches;
+                dialogShowMatrix(message, data.matrix);
             }
             else
                 showMessage(data.exception);
