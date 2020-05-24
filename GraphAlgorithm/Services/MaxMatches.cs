@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace GraphAlgorithm.Services
 {
     public class MaxMatches
     {
-        List<List<double>> edgesMatrix;
         List<int> u = new List<int>();
         List<int> v = new List<int>();
+        int maxMatches = 0;
 
         bool FindPath(int u1, List<List<double>> matrix, List<int> matching, List<bool> visited)
         {
@@ -24,7 +25,7 @@ namespace GraphAlgorithm.Services
             return false;
         }
 
-        public List<List<double>> Resolve(List<List<double>> matrix, bool isIncidentMatrix)
+        public List<List<double>> Resolve(List<List<double>> matrix, bool isIncidentMatrix, out int countMatches)
         {
             ValidateMatrix(matrix);
 
@@ -36,7 +37,12 @@ namespace GraphAlgorithm.Services
             matching.FillInt(-1, rightPart + leftPart);
 
             foreach (int ui in u)
-                FindPath(ui, matrix, matching, new List<bool>().FillBool(false, leftPart));
+            {
+                if(FindPath(ui, matrix, matching, new List<bool>().FillBool(false, leftPart + rightPart)))
+                {
+                    maxMatches++;
+                }
+            }
 
             for (int i = 0; i < matrix.Count; i++)
             {
@@ -52,6 +58,9 @@ namespace GraphAlgorithm.Services
                     }
                 }
             }
+
+            countMatches = maxMatches;
+
             return matrix;
         }
 
@@ -60,6 +69,8 @@ namespace GraphAlgorithm.Services
             if (matrix.Count == 0)
                 throw new MethodException("Матриця має некоректні дані.");
 
+            bool edgesExist = false;
+
             for (int i = 0; i < matrix.Count; i++)
             {
                 if (matrix[i].Count == 0)
@@ -67,12 +78,25 @@ namespace GraphAlgorithm.Services
 
                 for (int j = 0; j < matrix[i].Count; j++)
                 {
+                    if (!edgesExist)
+                    {
+                        edgesExist = matrix[i][j] == 1;
+                    }
+
+                    if(matrix[i][j] == 1 && i == j)
+                    {
+                        throw new MethodException("Граф не повинен мати петлі.");
+                    }
+
                     if (matrix[i][j] != 1 && matrix[i][j] != 0)
                     {
-                        throw new MethodException("Матриця повинна складатися тільки з 0 або 1.");
+                        throw new MethodException("Граф повинен бути незважений.");
                     }
                 }
             }
+
+            if(!edgesExist)
+                throw new MethodException("Граф повинен мати ребра.");
 
             if (!CheckDicotyledonousGraph(matrix))
             {

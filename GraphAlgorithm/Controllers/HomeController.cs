@@ -310,12 +310,13 @@ namespace GraphAlgorithm.Controllers
                     throw new MethodException("TEST EXSEPTION");
 
                 var method = new MaxMatches();
-                var resultMatrix = method.Resolve(matrix, false);
+                var resultMatrix = method.Resolve(matrix, false, out int countMatches);
 
                 result = new
                 {
                     exception = "",
-                    matrix = resultMatrix
+                    matrix = resultMatrix,
+                    countMatches = countMatches
                 };
             }
             catch (MethodException ex)
