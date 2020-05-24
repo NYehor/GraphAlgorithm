@@ -11,7 +11,7 @@ namespace GraphAlgorithm.Controllers
 {
     public class HomeController : Controller
     {
-        [HttpPost]
+        [HttpGet]
         public ActionResult SetMatrix(IndexViewModel indexViewModel = null)
         {
             return View("Index", indexViewModel);
@@ -242,8 +242,10 @@ namespace GraphAlgorithm.Controllers
 
             try
             {
-                if (matrix == null)
-                    throw new MethodException("TEST EXSEPTION");
+                if (matrix == null || !IsSymmetricMatrix(matrix))
+                {
+                    throw new MethodException("Матриця не валiдна або задано орiєнтовний граф. Даний алгоритм може працювати лише iз неорiєнтовними графами");
+                }
 
                 var method = new FloydWarshallFirtsAlgorithm();
                 var resultMatrix = method.Resolve(matrix);
@@ -272,8 +274,10 @@ namespace GraphAlgorithm.Controllers
 
             try
             {
-                if (matrix == null)
-                    throw new MethodException("TEST EXSEPTION");
+                if (matrix == null || !IsSymmetricMatrix(matrix))
+                {
+                    throw new MethodException("Матриця не валiдна або задано орiєнтовний граф. Даний алгоритм може працювати лише iз неорiєнтовними графами");
+                }
 
                 var method = new FloydWarshallSecondAlgorithm();
                 var resultMatrix = method.Resolve(matrix, false);

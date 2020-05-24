@@ -132,7 +132,7 @@
         </div>
     </div>
     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-        <form id="IncindenceMatrixForm" method="post" action="@Url.Action("SetMatrix")">
+        <form id="IncindenceMatrixForm" method="get" action="@Url.Action("SetMatrix")">
             <input name="TypeOfMatrix" id="isAdjacency" type="text" value="adjacency" style="display:none" />
             <input name="Separator" id="separatorID" type="text" value="adjacency" style="display:none" />
             <textarea name="Matrix" id="AdjacencyMatrixFieldPage" rows="10" cols="30">
